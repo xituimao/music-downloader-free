@@ -1,0 +1,28 @@
+{
+  "brand": "Music Downloader",
+  "search": {
+    "placeholder": "Search playlists...",
+    "button": "Search"
+  },
+  "nav": {
+    "home": "Home",
+    "guide": "User Guide",
+    "licenses": "Open Source"
+  },
+  "footer": {
+    "text": "Made with ❤️ by Rong'er | For educational purposes only"
+  },
+  "error": {
+    "loadFailed": "Failed to load",
+    "goBack": "Go back",
+    "inputKeyword": "Please enter search keywords",
+    "noDownloadableSongs": "No downloadable songs",
+    "jszipNotLoaded": "JSZip not loaded, please refresh and try again",
+    "allDownloadsFailed": "All songs download failed",
+    "selectSongsFirst": "Please select songs first",
+    "downloadInProgress": "Download in progress, please wait..."
+  },
+  "loading": "Loading...",
+  "noResults": "No playlists found"
+}
+

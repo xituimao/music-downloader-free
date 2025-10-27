@@ -67,6 +67,38 @@ body {
   flex-direction: column;
 }
 
+/* ===== 通用工具类 ===== */
+/* 文本溢出省略 */
+.text-ellipsis,
+.playlist-card h3,
+.song-name,
+.song-artist,
+.song-album,
+.player-name,
+.player-artist {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 圆形按钮基础样式 */
+.btn-circle {
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* Hover效果：Spotify灰色背景 */
+.hover-bg:hover,
+.hot-playlist-card:hover,
+.playlist-card:hover,
+.song-item:hover {
+  background: var(--spotify-hover);
+}
+
 /* ===== 布局容器 ===== */
 .container {
   max-width: 1200px;
@@ -157,14 +189,8 @@ main {
 .home-search-btn {
   width: 48px;
   height: 48px;
-  border-radius: 50%;
   background: var(--spotify-green);
   border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease;
   flex-shrink: 0;
 }
 
@@ -219,7 +245,6 @@ main {
 }
 
 .hot-playlist-card:hover {
-  background: var(--spotify-hover);
   transform: translateY(-4px);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
 }
@@ -248,6 +273,49 @@ main {
 .hot-playlist-card-count {
   font-size: 0.813rem;
   color: var(--text-secondary);
+}
+
+/* 排序切换按钮组 */
+.order-tabs {
+  display: flex;
+  gap: 8px;
+  background: var(--card-bg);
+  padding: 4px;
+  border-radius: var(--radius-md);
+}
+
+.order-tab {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  font-weight: 500;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.order-tab:hover:not(:disabled) {
+  background: var(--spotify-hover);
+  color: var(--text-primary);
+}
+
+.order-tab.active {
+  background: var(--spotify-green);
+  color: white;
+}
+
+.order-tab:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.order-tab i {
+  font-size: 1rem;
 }
 
 /* 主页状态：完全隐藏顶部导航栏 */
@@ -353,7 +421,6 @@ body.home-active main {
   border-radius: 500px;
   font-size: 0.813rem;
   font-weight: 700;
-  cursor: pointer;
   transition: all 0.2s ease;
   white-space: nowrap;
   text-transform: uppercase;
@@ -362,14 +429,11 @@ body.home-active main {
   display: inline-flex;
   align-items: center;
   gap: 8px;
+  cursor: pointer;
 }
 
 .btn i {
   font-size: 1rem;
-}
-
-.btn:hover {
-  transform: scale(1.04);
 }
 
 .btn:active {
@@ -457,10 +521,6 @@ body.home-active main {
   border-bottom: 1px solid var(--border-color);
 }
 
-.playlist-card:hover {
-  background: var(--spotify-hover);
-}
-
 .playlist-card img {
   width: 60px;
   height: 60px;
@@ -477,9 +537,6 @@ body.home-active main {
 .playlist-card h3 {
   font-size: 1rem;
   margin-bottom: 4px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
   color: var(--text-primary);
 }
 
@@ -678,7 +735,7 @@ body.home-active main {
   background: #ff4757;
   color: #fff;
   border-radius: 10px;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
   display: flex;
   align-items: center;
@@ -747,10 +804,6 @@ body.home-active main {
   margin: 0 var(--spacing-xs);
 }
 
-.song-item:hover {
-  background: var(--spotify-hover);
-}
-
 .song-item:last-child {
   border-bottom: none;
 }
@@ -773,9 +826,6 @@ body.home-active main {
 
 .song-name {
   font-weight: 400;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
   color: #fff;
 }
 
@@ -783,9 +833,6 @@ body.home-active main {
 .song-album {
   color: var(--text-secondary);
   font-size: 0.875rem;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
 .song-duration {
@@ -821,6 +868,66 @@ body.home-active main {
   }
   50% {
     opacity: 0.7;
+  }
+}
+
+/* ===== 下载状态显示 ===== */
+.download-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 24px;
+  background: var(--spotify-light-gray);
+  color: var(--text-primary);
+  border-radius: 500px;
+  font-size: 0.813rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  white-space: nowrap;
+}
+
+/* 旋转的loading图标 */
+.download-spinner {
+  font-size: 1rem;
+  animation: spin 1s linear infinite;
+  color: var(--spotify-green);
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* 歌曲列表中的状态图标 */
+.song-status-icon {
+  margin-left: 8px;
+  font-size: 0.95rem;
+  vertical-align: middle;
+}
+
+.song-status-icon.downloading {
+  color: var(--spotify-green);
+  animation: spin 1s linear infinite;
+}
+
+.song-status-icon.completed {
+  color: var(--spotify-green);
+  animation: fadeInScale 0.3s ease;
+}
+
+@keyframes fadeInScale {
+  0% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
   }
 }
 
@@ -979,9 +1086,6 @@ body.home-active main {
   color: #fff;
   font-weight: 600;
   font-size: 14px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
   margin-bottom: 4px;
   width: 100%;
 }
@@ -989,9 +1093,6 @@ body.home-active main {
 .player-artist {
   color: rgba(255, 255, 255, 0.8);
   font-size: 12px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
   width: 100%;
 }
 
@@ -1007,12 +1108,6 @@ body.home-active main {
   color: var(--text-secondary);
   width: 32px;
   height: 32px;
-  border-radius: 50%;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease;
   padding: 0;
 }
 
@@ -1053,22 +1148,30 @@ body.home-active main {
 
 .player-time {
   color: var(--text-secondary);
-  font-size: 11px;
+  font-size: 12px;
   min-width: 40px;
   text-align: center;
   font-weight: 400;
 }
 
-/* 进度条容器：不设置背景色，避免与slider轨道渐变重叠造成双进度条 */
-.player-slider-container {
-  flex: 1;
-  height: 4px;
+/* 通用滑块样式（进度条和音量条共用） */
+.player-slider-container,
+.volume-slider-container {
   border-radius: 2px;
   overflow: visible;
   position: relative;
 }
 
-.player-slider {
+.player-slider-container {
+  flex: 1;
+}
+
+.volume-slider-container {
+  width: 80px;
+}
+
+.player-slider,
+.volume-slider {
   width: 100%;
   height: 4px;
   -webkit-appearance: none;
@@ -1081,7 +1184,9 @@ body.home-active main {
   z-index: 2;
 }
 
-.player-slider::-webkit-slider-thumb {
+/* Thumb样式：默认隐藏，hover时显示 */
+.player-slider::-webkit-slider-thumb,
+.volume-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
   width: 12px;
@@ -1094,15 +1199,18 @@ body.home-active main {
   opacity: 0;
 }
 
-.player-slider-container:hover .player-slider::-webkit-slider-thumb {
+.player-slider-container:hover .player-slider::-webkit-slider-thumb,
+.volume-slider-container:hover .volume-slider::-webkit-slider-thumb {
   opacity: 1;
 }
 
-.player-slider::-webkit-slider-thumb:hover {
+.player-slider::-webkit-slider-thumb:hover,
+.volume-slider::-webkit-slider-thumb:hover {
   transform: scale(1.2);
 }
 
-.player-slider::-moz-range-thumb {
+.player-slider::-moz-range-thumb,
+.volume-slider::-moz-range-thumb {
   width: 12px;
   height: 12px;
   border-radius: 50%;
@@ -1113,10 +1221,12 @@ body.home-active main {
   opacity: 0;
 }
 
-.player-slider-container:hover .player-slider::-moz-range-thumb {
+.player-slider-container:hover .player-slider::-moz-range-thumb,
+.volume-slider-container:hover .volume-slider::-moz-range-thumb {
   opacity: 1;
 }
 
+/* 轨道渐变效果 */
 .player-slider::-webkit-slider-runnable-track {
   width: 100%;
   height: 4px;
@@ -1129,49 +1239,22 @@ body.home-active main {
   border-radius: 2px;
 }
 
-.player-slider-container:hover::-webkit-slider-runnable-track {
+.volume-slider::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 4px;
   background: linear-gradient(to right, 
-    var(--spotify-green-hover) 0%, 
-    var(--spotify-green-hover) var(--progress, 0%), 
-    #4d4d4d var(--progress, 0%), 
+    var(--spotify-green) 0%, 
+    var(--spotify-green) var(--volume, 100%), 
+    #4d4d4d var(--volume, 100%), 
     #4d4d4d 100%
   );
+  border-radius: 2px;
 }
 
 .player-volume {
   display: flex;
   align-items: center;
   gap: 8px;
-}
-
-.volume-slider {
-  width: 80px;
-  height: 4px;
-  -webkit-appearance: none;
-  appearance: none;
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 2px;
-  outline: none;
-  cursor: pointer;
-}
-
-.volume-slider::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: #fff;
-  cursor: pointer;
-}
-
-.volume-slider::-moz-range-thumb {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: #fff;
-  cursor: pointer;
-  border: none;
 }
 
 .player-close {
@@ -1190,12 +1273,6 @@ body.home-active main {
   color: var(--text-secondary);
   width: 32px;
   height: 32px;
-  border-radius: 50%;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease;
   padding: 0;
   opacity: 1; /* 始终显示，移动端友好 */
   box-shadow: none;
@@ -1418,17 +1495,11 @@ body.home-active main {
   
   .player-name {
     font-size: 13px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
     width: 100%;
   }
   
   .player-artist {
-    font-size: 11px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    font-size: 12px;
     width: 100%;
   }
   
@@ -1456,7 +1527,7 @@ body.home-active main {
   
   /* 只显示剩余/总时长 */
   #totalTime {
-    font-size: 11px;
+    font-size: 12px;
     color: rgba(255, 255, 255, 0.9);
     white-space: nowrap;
     margin-right: 10px;

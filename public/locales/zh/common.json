@@ -1,0 +1,28 @@
+{
+  "brand": "一键音乐下载",
+  "search": {
+    "placeholder": "搜索歌单...",
+    "button": "搜索"
+  },
+  "nav": {
+    "home": "首页",
+    "guide": "使用指南",
+    "licenses": "开源依赖"
+  },
+  "footer": {
+    "text": "Made with ❤️ by 蓉儿 | 仅供学习交流使用"
+  },
+  "error": {
+    "loadFailed": "加载失败",
+    "goBack": "返回",
+    "inputKeyword": "请输入搜索关键词",
+    "noDownloadableSongs": "没有可下载的歌曲",
+    "jszipNotLoaded": "JSZip 未加载，请刷新页面重试",
+    "allDownloadsFailed": "所有歌曲下载失败",
+    "selectSongsFirst": "请先选择要下载的歌曲",
+    "downloadInProgress": "正在下载中，请稍候..."
+  },
+  "loading": "加载中...",
+  "noResults": "没有找到相关歌单"
+}
+

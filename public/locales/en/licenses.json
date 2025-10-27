@@ -1,0 +1,29 @@
+{
+  "title": "Open Source Dependencies",
+  "subtitle": "This project is built upon the following excellent open-source libraries. Thanks to the open-source community ❤️",
+  "backToHome": "Back to Home",
+  "sections": {
+    "core": "Core Runtime Dependencies",
+    "dev": "Development Dependencies",
+    "frontend": "Frontend Static Resources"
+  },
+  "licenseInfo": {
+    "title": "License Information",
+    "mit": "Allows free use, modification and distribution, only requires retaining original copyright notice",
+    "apache": "Similar to MIT, but provides patent license protection",
+    "dual": "Dual license, you can choose one to comply with",
+    "footer": "This project is open-sourced under the MIT license, see GitHub repository for details"
+  },
+  "dependencies": {
+    "nextjs": "React framework providing SSR, SSG, routing and more",
+    "react": "JavaScript library for building user interfaces",
+    "reactdom": "DOM renderer for React",
+    "neteaseapi": "Netease Cloud Music Node.js API service",
+    "typescript": "Superset of JavaScript with static type checking",
+    "typesnode": "TypeScript type definitions for Node.js",
+    "typesreact": "TypeScript type definitions for React",
+    "jszip": "Create, read and edit .zip files in browser",
+    "remixicon": "Open-source neutral-style icon library"
+  }
+}
+

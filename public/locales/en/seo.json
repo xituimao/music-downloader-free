@@ -1,0 +1,25 @@
+{
+  "home": {
+    "title": "Music Downloader | Batch Download Playlists (Local ZIP Packaging)",
+    "description": "Search, preview and batch download playlists; package to ZIP locally in browser, stable and worry-free."
+  },
+  "search": {
+    "title": "{{keyword}} Playlist Search | Music Downloader & Batch Packaging",
+    "description": "Search results for {{keyword}} playlists, supports online preview, batch selection and local packaging download."
+  },
+  "playlist": {
+    "title": "{{name}} Playlist Download | Batch Download {{count}} Songs",
+    "description": "{{name}} playlist with {{count}} songs. Supports online playback and one-click batch download."
+  },
+  "docs": {
+    "guide": {
+      "title": "Music Downloader User Guide | FAQ",
+      "description": "Batch download steps, notes and FAQ; VIP songs preview version instructions."
+    },
+    "quality": {
+      "title": "Audio Quality Guide | MP3/FLAC/APE Differences",
+      "description": "Learn the differences between audio quality formats and choose the best download option for you."
+    }
+  }
+}
+

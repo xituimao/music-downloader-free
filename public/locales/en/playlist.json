@@ -1,0 +1,40 @@
+{
+  "actions": {
+    "selectAll": "Select All",
+    "deselectAll": "Deselect All",
+    "download": "Download",
+    "downloadSelected": "Download Selected ({{count}})"
+  },
+  "fee": {
+    "vip": "VIP",
+    "paid": "Paid",
+    "trial": "Preview"
+  },
+  "vipWarning": {
+    "title": "⚠️ Detected {{count}} VIP/Paid songs",
+    "message": "Without VIP login, only 30-second preview version will be downloaded",
+    "confirm": "Continue downloading? (Free songs will be downloaded in full version)"
+  },
+  "download": {
+    "progress": "Progress: {{current}}/{{total}}",
+    "downloading": "Downloading: {{name}}",
+    "success": "Download complete! Success: {{success}}, Failed: {{fail}}",
+    "packaging": "Packaging ZIP...",
+    "complete": "Package complete!",
+    "failed": "Download failed: {{name}}"
+  },
+  "player": {
+    "play": "Play",
+    "pause": "Pause",
+    "previous": "Previous",
+    "next": "Next",
+    "volume": "Volume",
+    "mute": "Mute",
+    "unmute": "Unmute",
+    "currentTime": "Current time",
+    "duration": "Duration",
+    "noSong": "No song",
+    "unknown": "Unknown"
+  }
+}
+

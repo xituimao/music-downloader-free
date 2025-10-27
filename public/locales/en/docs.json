@@ -1,0 +1,33 @@
+{
+  "guide": {
+    "title": "User Guide & FAQ",
+    "quickStart": {
+      "title": "Quick Start",
+      "step1": "Search for playlists on the homepage",
+      "step2": "Select desired songs in the playlist details",
+      "step3": "Click 'Download' and wait for ZIP packaging to complete"
+    },
+    "notes": {
+      "title": "Notes",
+      "item1": "For educational purposes only, commercial use and copyright infringement are prohibited",
+      "item2": "VIP songs will only download preview version by default"
+    },
+    "faq": {
+      "q1": "How to batch download playlists?",
+      "a1": "Search for playlists, select the songs you want, click the download button, and the browser will package them into a ZIP file locally and save automatically.",
+      "q2": "Can I download the full version of VIP songs?",
+      "a2": "Without VIP login, only preview versions can be downloaded; free songs can be downloaded in full version."
+    }
+  },
+  "quality": {
+    "title": "Audio Quality Guide",
+    "description": "Learn the differences between audio quality formats",
+    "formats": {
+      "mp3": "MP3 - Common lossy compression format, 320kbps for high quality",
+      "flac": "FLAC - Lossless compression format, perfect audio quality",
+      "ape": "APE - Lossless compression format with higher compression ratio",
+      "wav": "WAV - Uncompressed original format, larger file size"
+    }
+  }
+}
+

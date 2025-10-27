@@ -1,0 +1,42 @@
+# 依赖
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+
+# Next.js 构建产物
+.next/
+out/
+
+# 测试
+coverage/
+
+# 环境变量
+.env
+.env.local
+.env.*.local
+
+# 编辑器
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# 系统文件
+.DS_Store
+Thumbs.db
+
+# 旧版 Express 服务器（不需要部署）
+server.js
+
+# 文档（仅保留在代码仓库，不需要部署）
+docs/
+!docs/.gitkeep
+*.md
+!README.md
+
+# 其他
+.git/
+

@@ -1,0 +1,40 @@
+{
+  "actions": {
+    "selectAll": "全选",
+    "deselectAll": "取消全选",
+    "download": "下载",
+    "downloadSelected": "下载选中 ({{count}})"
+  },
+  "fee": {
+    "vip": "VIP",
+    "paid": "付费",
+    "trial": "试听"
+  },
+  "vipWarning": {
+    "title": "⚠️ 检测到 {{count}} 首VIP/付费歌曲",
+    "message": "未登录VIP账号将只能下载30秒试听版",
+    "confirm": "是否继续下载？（免费歌曲将正常下载完整版）"
+  },
+  "download": {
+    "progress": "下载进度: {{current}}/{{total}}",
+    "downloading": "正在下载: {{name}}",
+    "success": "下载完成！成功: {{success}} 首，失败: {{fail}} 首",
+    "packaging": "正在打包 ZIP...",
+    "complete": "打包完成！",
+    "failed": "下载失败: {{name}}"
+  },
+  "player": {
+    "play": "播放",
+    "pause": "暂停",
+    "previous": "上一首",
+    "next": "下一首",
+    "volume": "音量",
+    "mute": "静音",
+    "unmute": "取消静音",
+    "currentTime": "当前时间",
+    "duration": "总时长",
+    "noSong": "暂无歌曲",
+    "unknown": "未知"
+  }
+}
+

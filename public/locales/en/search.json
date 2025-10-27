@@ -1,0 +1,11 @@
+{
+  "results": {
+    "title": "Search Results"
+  },
+  "playlist": {
+    "by": "by",
+    "unknown": "Unknown",
+    "songCount": "{{count}} songs"
+  }
+}
+

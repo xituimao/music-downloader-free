@@ -1,0 +1,11 @@
+{
+  "results": {
+    "title": "搜索结果"
+  },
+  "playlist": {
+    "by": "by",
+    "unknown": "未知",
+    "songCount": "共 {{count}} 首歌曲"
+  }
+}
+

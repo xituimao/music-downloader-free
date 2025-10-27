@@ -1,0 +1,25 @@
+{
+  "home": {
+    "title": "一键音乐下载｜歌单批量下载工具（本地 ZIP 打包）",
+    "description": "搜索歌单，在线预览与一键批量下载；浏览器本地打包 ZIP，稳定省心。"
+  },
+  "search": {
+    "title": "{{keyword}} 歌单搜索｜一键音乐下载与批量打包",
+    "description": "{{keyword}} 相关歌单搜索结果，支持在线预览、批量勾选并本地打包下载。"
+  },
+  "playlist": {
+    "title": "{{name}} 歌单下载｜批量下载 {{count}} 首歌曲",
+    "description": "{{name}} 歌单，共 {{count}} 首歌曲。支持在线播放与一键批量下载。"
+  },
+  "docs": {
+    "guide": {
+      "title": "一键音乐下载使用教程｜常见问题",
+      "description": "歌单批量下载步骤、注意事项与常见问题；VIP 歌曲仅试听版说明。"
+    },
+    "quality": {
+      "title": "音质格式科普｜MP3/FLAC/APE 区别说明",
+      "description": "了解不同音质格式的区别，选择最适合你的音质下载方案。"
+    }
+  }
+}
+

@@ -3,3 +3,12 @@ node_modules/
 .DS_Store
 downloads/
 
+# Next.js
+.next/
+out/
+build/
+dist/
+
+# Vercel
+.vercel
+

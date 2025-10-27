@@ -1,0 +1,29 @@
+{
+  "title": "开源依赖清单",
+  "subtitle": "本项目基于以下优秀的开源库构建，感谢开源社区的无私贡献 ❤️",
+  "backToHome": "返回首页",
+  "sections": {
+    "core": "核心运行时依赖",
+    "dev": "开发时依赖",
+    "frontend": "前端静态资源库"
+  },
+  "licenseInfo": {
+    "title": "许可证说明",
+    "mit": "允许自由使用、修改和分发，仅需保留原版权声明",
+    "apache": "类似 MIT，但提供专利授权保护",
+    "dual": "双重许可，可选择其一遵守",
+    "footer": "本项目基于 MIT 许可证开源，详见项目 GitHub 仓库"
+  },
+  "dependencies": {
+    "nextjs": "React 框架，提供 SSR、SSG、路由等能力",
+    "react": "用于构建用户界面的 JavaScript 库",
+    "reactdom": "React 的 DOM 渲染器",
+    "neteaseapi": "网易云音乐 Node.js API service",
+    "typescript": "JavaScript 的超集，提供静态类型检查",
+    "typesnode": "Node.js 的 TypeScript 类型定义",
+    "typesreact": "React 的 TypeScript 类型定义",
+    "jszip": "在浏览器中创建、读取和编辑 .zip 文件",
+    "remixicon": "开源的中性风格图标库"
+  }
+}
+

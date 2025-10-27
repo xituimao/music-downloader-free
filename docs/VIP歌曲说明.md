@@ -89,14 +89,16 @@ level=exhigh
 
 3. **修改API调用**
    ```javascript
-   // server.js
-   app.get('/api/song/url', async (req, res) => {
+   // pages/api/song/url.ts
+   export default async function handler(req, res) {
+     const { ids, level = 'standard' } = req.query
      const result = await song_url_v1({
        id: ids,
        level,
        cookie: req.cookies.MUSIC_U || process.env.NETEASE_COOKIE
      })
-   })
+     res.json(result.body)
+   }
    ```
 
 #### 优点
