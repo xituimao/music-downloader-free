@@ -68,12 +68,31 @@ export default function Home({ initialPlaylists, initialOrder }: HomeProps) {
   }
 
   const formatPlayCount = (count: number) => {
+    let formattedCount = ''
     if (count >= 100000000) {
-      return (count / 100000000).toFixed(1) + t('home:playCount.hundredMillion')
+      formattedCount = (count / 100000000).toFixed(1) + t('home:playCount.hundredMillion')
     } else if (count >= 10000) {
-      return (count / 10000).toFixed(1) + t('home:playCount.tenThousand')
+      formattedCount = (count / 10000).toFixed(1) + t('home:playCount.tenThousand')
     } else {
-      return count.toString()
+      formattedCount = count.toString()
+    }
+    return `${formattedCount} ${t('home:playCount.label')}`
+  }
+
+  const formatUpdateTime = (timestamp: number) => {
+    const date = new Date(timestamp)
+    const now = new Date()
+    const diffTime = now.getTime() - date.getTime()
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24))
+
+    if (diffDays === 0) {
+      return '今天'
+    } else if (diffDays === 1) {
+      return '昨天'
+    } else if (diffDays < 7) {
+      return `${diffDays}天前`
+    } else {
+      return date.toLocaleDateString()
     }
   }
 
@@ -208,8 +227,15 @@ export default function Home({ initialPlaylists, initialOrder }: HomeProps) {
                   <div className="hot-playlist-card-title" title={playlist.name}>
                     {playlist.name}
                   </div>
-                  <div className="hot-playlist-card-count">
-                    {formatPlayCount(playlist.playCount)}
+                  <div className="hot-playlist-card-stats">
+                    <span className="play-count" title="播放量">
+                      <i className="ri-play-circle-fill"></i>
+                      {formatPlayCount(playlist.playCount)}
+                    </span>
+                    <span className="update-time" title="更新时间">
+                      <i className="ri-time-line"></i>
+                      {t('home:updateTime.label')} {formatUpdateTime(playlist.updateTime)}
+                    </span>
                   </div>
                 </div>
               ))
@@ -246,21 +272,34 @@ export default function Home({ initialPlaylists, initialOrder }: HomeProps) {
  * 服务端渲染（SSR）
  * 1. 获取初始热门歌单数据，默认按热门排序
  * 2. 提升首屏渲染速度和SEO效果
+ * 3. 修复：网易云API的order='new'不工作，在服务端应用排序逻辑
  */
 export const getServerSideProps: GetServerSideProps = async ({ locale }) => {
   try {
-    // 服务端直接调用网易云API获取热门歌单
+    // 修复：网易云API的order='new'参数不工作，始终使用'hot'获取数据
+    // 然后在服务端应用热门排序逻辑（按播放量排序）
     const result = await top_playlist({
       cat: '全部',
       limit: 20,
       offset: 0,
-      order: 'hot' as any // 默认按热门排序
+      order: 'hot' as any // 固定使用hot排序获取数据
     })
+
+    let playlists: any[] = (result.body as any)?.playlists || []
+
+    // 服务端应用热门排序：按播放量降序排列
+    if (playlists.length > 0) {
+      playlists = playlists.sort((a: any, b: any) => {
+        const aCount = typeof a.playCount === 'number' ? a.playCount : 0
+        const bCount = typeof b.playCount === 'number' ? b.playCount : 0
+        return bCount - aCount // 降序排列（播放量高的在前）
+      })
+    }
 
     return {
       props: {
         ...(await serverSideTranslations(locale || 'zh', ['common', 'home', 'seo'])),
-        initialPlaylists: result.body?.playlists || [],
+        initialPlaylists: playlists,
         initialOrder: 'hot' as const
       }
     }

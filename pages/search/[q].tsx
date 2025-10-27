@@ -33,6 +33,16 @@ export default function SearchPage({ q, playlists }: { q: string; playlists: Pla
     return `${url}?param=${size}x${size}`
   }
 
+  const formatPlayCount = (count: number) => {
+    if (count >= 100000000) {
+      return (count / 100000000).toFixed(1) + '亿'
+    } else if (count >= 10000) {
+      return (count / 10000).toFixed(1) + '万'
+    } else {
+      return count.toString()
+    }
+  }
+
   return (
     <>
       <Head>
@@ -96,7 +106,15 @@ export default function SearchPage({ q, playlists }: { q: string; playlists: Pla
                   <div className="playlist-card-body">
                     <h3 title={playlist.name}>{playlist.name}</h3>
                     <p className="creator">{t('search:playlist.by')} {playlist.creator?.nickname || t('search:playlist.unknown')}</p>
-                    <p className="track-count">{t('search:playlist.songCount', { count: playlist.trackCount })}</p>
+                    <div className="playlist-stats">
+                      <span className="track-count">{t('search:playlist.songCount', { count: playlist.trackCount })}</span>
+                      {playlist.playCount && (
+                        <span className="play-count" title="播放量">
+                          <i className="ri-play-circle-fill"></i>
+                          {formatPlayCount(playlist.playCount)} {t('search:playlist.playCount')}
+                        </span>
+                      )}
+                    </div>
                   </div>
                 </div>
               ))

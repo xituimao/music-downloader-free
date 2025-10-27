@@ -13,8 +13,8 @@
 - [x] `next-i18next.config.js` - 国际化配置
 
 ### 配置项检查
-- [x] **API 超时时间**: 30 秒（免费版需改为 10 秒）
-- [x] **部署区域**: `["hkg1", "sfo1"]`（香港 + 旧金山）
+- [x] **API 超时时间**: 10 秒（免费版配置）
+- [x] **部署区域**: `["sfo1"]`（旧金山，免费版单区域）
 - [x] **国际化**: 支持中文（zh）和英文（en）
 - [x] **SEO 配置**: sitemap.xml 和 robots.txt 路由重写
 - [x] **安全头部**: X-Frame-Options, CSP 等
@@ -108,7 +108,7 @@ git push origin main  # 每次 push 都会自动触发部署
 
 ```env
 # 站点 URL（用于 SEO）
-NEXT_PUBLIC_SITE_URL=https://your-domain.vercel.app
+NEXT_PUBLIC_SITE_URL=https://music-download-free-ol1pmbf2z-xituimaos-projects.vercel.app
 
 # GTM 容器 ID（已硬编码，无需配置）
 NEXT_PUBLIC_GTM_ID=GTM-5GDR9Z8Z
@@ -137,16 +137,16 @@ API_TIMEOUT=30000
 2. **部署区域**：免费版仅支持单区域
 ```json
 {
-  "regions": ["hkg1"]  // 仅保留一个区域
+  "regions": ["sfo1"]  // 已配置为单区域
 }
 ```
 
 ### 免费版限制
 - ✅ 带宽：100 GB/月
 - ✅ 构建时间：6 小时/月
-- ✅ Serverless Function 执行时间：10 秒
+- ✅ Serverless Function 执行时间：10 秒（已配置）
 - ✅ Serverless Function 调用：100 GB-小时/月
-- ❌ 不支持多区域部署
+- ❌ 不支持多区域部署（已配置单区域 sfo1）
 - ❌ 不支持高级分析
 
 > 对于本项目，免费版完全够用！因为：
@@ -157,19 +157,19 @@ API_TIMEOUT=30000
 ## ✅ 部署后验证
 
 ### 1. 基础功能
-- [ ] 访问首页：`https://your-domain.vercel.app`
-- [ ] 搜索功能：`https://your-domain.vercel.app/search/周杰伦`
-- [ ] 歌单详情：`https://your-domain.vercel.app/playlist/123456`
-- [ ] 文档页面：`https://your-domain.vercel.app/docs/guide`
+- [ ] 访问首页：`https://music-download-free-ol1pmbf2z-xituimaos-projects.vercel.app`
+- [ ] 搜索功能：`https://music-download-free-ol1pmbf2z-xituimaos-projects.vercel.app/search/周杰伦`
+- [ ] 歌单详情：`https://music-download-free-ol1pmbf2z-xituimaos-projects.vercel.app/playlist/123456`
+- [ ] 文档页面：`https://music-download-free-ol1pmbf2z-xituimaos-projects.vercel.app/docs/guide`
 
 ### 2. 国际化
-- [ ] 中文版：`https://your-domain.vercel.app/zh`
-- [ ] 英文版：`https://your-domain.vercel.app/en`
+- [ ] 中文版：`https://music-download-free-ol1pmbf2z-xituimaos-projects.vercel.app/zh`
+- [ ] 英文版：`https://music-download-free-ol1pmbf2z-xituimaos-projects.vercel.app/en`
 - [ ] 语言切换：浏览器语言自动检测
 
 ### 3. SEO 资源
-- [ ] Sitemap：`https://your-domain.vercel.app/sitemap.xml`
-- [ ] Robots：`https://your-domain.vercel.app/robots.txt`
+- [ ] Sitemap：`https://music-download-free-ol1pmbf2z-xituimaos-projects.vercel.app/sitemap.xml`
+- [ ] Robots：`https://music-download-free-ol1pmbf2z-xituimaos-projects.vercel.app/robots.txt`
 - [ ] 结构化数据：查看页面源代码，确认 JSON-LD
 
 ### 4. 监控埋点

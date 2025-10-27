@@ -24,6 +24,8 @@ type Playlist = {
   coverImgUrl?: string
   creator?: { nickname?: string }
   tracks?: Song[]
+  playCount?: number
+  updateTime?: number
 }
 
 export default function PlaylistPage({ playlist }: { playlist: Playlist | null }) {
@@ -86,6 +88,16 @@ export default function PlaylistPage({ playlist }: { playlist: Playlist | null }
     const minutes = Math.floor(seconds / 60)
     const remainingSeconds = seconds % 60
     return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`
+  }
+
+  const formatPlayCount = (count: number) => {
+    if (count >= 100000000) {
+      return (count / 100000000).toFixed(1) + '亿'
+    } else if (count >= 10000) {
+      return (count / 10000).toFixed(1) + '万'
+    } else {
+      return count.toString()
+    }
   }
 
   const isVipSong = (song: Song) => {
@@ -415,6 +427,15 @@ export default function PlaylistPage({ playlist }: { playlist: Playlist | null }
                     <span className="creator-name">{playlist.creator?.nickname || t('playlist:player.unknown')}</span>
                     <span className="separator">•</span>
                     <span className="track-count">{t('search:playlist.songCount', { count })}</span>
+                    {playlist.playCount && (
+                      <>
+                        <span className="separator">•</span>
+                        <span className="play-count" title="播放量">
+                          <i className="ri-play-circle-fill"></i>
+                          {formatPlayCount(playlist.playCount || 0)} {t('playlist:detail.playCount')}
+                        </span>
+                      </>
+                    )}
                   </div>
                 </div>
               </div>
@@ -447,7 +468,7 @@ export default function PlaylistPage({ playlist }: { playlist: Playlist | null }
                 disabled={selectedSongs.size === 0}
               >
                 <i className="ri-download-line"></i>
-                <span>{selectedSongs.size > 0 ? t('playlist:actions.downloadSelected', { count: selectedSongs.size }) : t('playlist:actions.download')}</span>
+                <span>{t('playlist:actions.download')}</span>
                 {selectedSongs.size > 0 && (
                   <span className="download-badge">{selectedSongs.size}</span>
                 )}

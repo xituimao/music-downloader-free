@@ -6,12 +6,16 @@
   },
   "order": {
     "hot": "Hot",
-    "new": "Latest"
+    "new": "New"
   },
   "noData": "No data available",
   "playCount": {
     "hundredMillion": "B",
-    "tenThousand": "W"
+    "tenThousand": "W",
+    "label": "plays"
+  },
+  "updateTime": {
+    "label": "Updated"
   }
 }
 

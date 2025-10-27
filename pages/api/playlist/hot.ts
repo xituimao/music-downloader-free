@@ -41,20 +41,21 @@ function logger(message: string, data?: any) {
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { cat = '全部', limit = '20', offset = '0', order = 'hot' } = req.query
-  
+
   try {
     const orderValue = String(order)
     const startTime = Date.now()
     logger('开始请求热门歌单API', { cat, limit, offset, order: orderValue })
-    
-    // 首先尝试使用网易云API的原生排序参数
+
+    // 修复：网易云API的order='new'参数不工作，始终使用'hot'获取数据
+    // 然后在服务端根据需要进行重新排序
     const result = await top_playlist({
       cat: String(cat),
       limit: Number(limit),
       offset: Number(offset),
-      order: orderValue as any // 尝试传入用户选择的排序
+      order: 'hot' as any // 固定使用hot排序获取数据
     })
-    
+
     // 记录API响应时间
     const playlistCount = (result.body as any)?.playlists?.length || 0
     logger('API响应完成', {
@@ -62,82 +63,75 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       resultCode: result.status,
       playlistCount
     })
-    
+
     // 获取歌单列表
     let playlists = (result.body as any)?.playlists || []
-    
-    // 测试API原生排序是否有效
-    // 先收集原始数据中的时间字段信息
+
+    // 根据排序类型执行服务端排序
     if (playlists.length > 0) {
-      const samplePlaylist = playlists[0]
-      const timeFields = {
-        createTime: samplePlaylist.createTime,
-        updateTime: samplePlaylist.updateTime,
-        publishTime: samplePlaylist.publishTime,
-        trackUpdateTime: samplePlaylist.trackUpdateTime
-      }
-      logger('歌单数据结构', timeFields)
-      
-      // 根据排序类型执行不同的逻辑
       if (orderValue === 'new') {
-        logger('开始处理「最新」排序逻辑')
-        
-        // 确定可用的时间字段
-        let timeField = null
-        if (samplePlaylist.updateTime) timeField = 'updateTime'
-        else if (samplePlaylist.createTime) timeField = 'createTime'
-        else if (samplePlaylist.trackUpdateTime) timeField = 'trackUpdateTime'
-        else if (samplePlaylist.publishTime) timeField = 'publishTime'
-        
-        if (timeField) {
-          logger(`使用 ${timeField} 字段进行排序`)
-          
-          // 存储原始排序结果的前三个条目，用于比较
-          const originalOrder = playlists.slice(0, 3).map((p: any) => ({
-            id: p.id,
-            name: p.name,
-            timeValue: p[timeField]
-          }))
-          
-          // 排序
-          playlists = playlists.sort((a: any, b: any) => {
-            // 避免数据类型问题
-            const aTime = typeof a[timeField] === 'number' ? a[timeField] : new Date(a[timeField] || 0).getTime()
-            const bTime = typeof b[timeField] === 'number' ? b[timeField] : new Date(b[timeField] || 0).getTime()
-            return bTime - aTime  // 降序排列（最新的在前）
-          })
-          
-          // 记录排序后的前三条目，用于比较排序效果
-          const newOrder = playlists.slice(0, 3).map((p: any) => ({
-            id: p.id,
-            name: p.name,
-            timeValue: p[timeField]
-          }))
-          
-          // 比较前后排序结果是否有变化
-          const hasChanged = JSON.stringify(originalOrder) !== JSON.stringify(newOrder)
-          logger(`排序完成，排序结果${hasChanged ? '有变化' : '无变化'}`, {
-            original: originalOrder,
-            sorted: newOrder
-          })
-        } else {
-          logger('无法找到合适的时间字段，继续使用API原始排序')
-        }
+        // 最新排序：使用updateTime字段进行降序排列
+        logger('开始处理「最新」排序逻辑，使用updateTime字段')
+
+        // 存储原始排序结果的前三个条目，用于比较
+        const originalOrder = playlists.slice(0, 3).map((p: any) => ({
+          id: p.id,
+          name: p.name,
+          updateTime: p.updateTime
+        }))
+
+        // 按更新时间降序排列（最新的在前）
+        playlists = playlists.sort((a: any, b: any) => {
+          // 避免数据类型问题，统一转换为时间戳
+          const aTime = typeof a.updateTime === 'number' ? a.updateTime : new Date(a.updateTime || 0).getTime()
+          const bTime = typeof b.updateTime === 'number' ? b.updateTime : new Date(b.updateTime || 0).getTime()
+          return bTime - aTime  // 降序排列（最新的在前）
+        })
+
+        // 记录排序后的前三条目，用于比较排序效果
+        const newOrder = playlists.slice(0, 3).map((p: any) => ({
+          id: p.id,
+          name: p.name,
+          updateTime: p.updateTime
+        }))
+
+        // 比较前后排序结果是否有变化
+        const hasChanged = JSON.stringify(originalOrder) !== JSON.stringify(newOrder)
+        logger(`最新排序完成，排序结果${hasChanged ? '有变化' : '无变化'}`, {
+          original: originalOrder,
+          sorted: newOrder
+        })
       } else {
-        // 热门排序，默认使用API的排序结果，还可以考虑再次按 playCount 排序
-        logger('热门排序，使用API原始排序结果')
-        // 如果需要确保按播放量排序，可以取消这个注释启用下面的代码
-        /*
-        if (samplePlaylist.playCount !== undefined) {
-          logger('使用 playCount 进行热门排序')
-          playlists = playlists.sort((a: any, b: any) => {
-            return b.playCount - a.playCount  // 降序排列（播放量高的在前）
-          })
-        }
-        */
+        // 热门排序：使用playCount字段进行降序排列，确保真正的热门歌单在前
+        logger('热门排序，使用playCount进行服务端排序')
+
+        const originalOrder = playlists.slice(0, 3).map((p: any) => ({
+          id: p.id,
+          name: p.name,
+          playCount: p.playCount
+        }))
+
+        playlists = playlists.sort((a: any, b: any) => {
+          // 避免数据类型问题
+          const aCount = typeof a.playCount === 'number' ? a.playCount : 0
+          const bCount = typeof b.playCount === 'number' ? b.playCount : 0
+          return bCount - aCount  // 降序排列（播放量高的在前）
+        })
+
+        const newOrder = playlists.slice(0, 3).map((p: any) => ({
+          id: p.id,
+          name: p.name,
+          playCount: p.playCount
+        }))
+
+        const hasChanged = JSON.stringify(originalOrder) !== JSON.stringify(newOrder)
+        logger(`热门排序完成，排序结果${hasChanged ? '有变化' : '无变化'}`, {
+          original: originalOrder,
+          sorted: newOrder
+        })
       }
     }
-    
+
     // 返回排序后的结果
     // 添加排序相关信息
     res.status(200).json({
@@ -145,7 +139,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       playlists,
       _sort: {
         order: orderValue,
-        appliedServerSideSort: orderValue === 'new', // 标记是否应用了服务端排序
+        appliedServerSideSort: true, // 现在始终在服务端应用排序
         count: playlists.length
       }
     })

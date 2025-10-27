@@ -11,7 +11,11 @@
   "noData": "暂无数据",
   "playCount": {
     "hundredMillion": "亿",
-    "tenThousand": "万"
+    "tenThousand": "万",
+    "label": "播放"
+  },
+  "updateTime": {
+    "label": "更新于"
   }
 }
 

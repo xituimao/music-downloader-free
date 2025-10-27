@@ -1,9 +1,8 @@
 {
   "actions": {
     "selectAll": "Select All",
-    "deselectAll": "Deselect All",
-    "download": "Download",
-    "downloadSelected": "Download Selected ({{count}})"
+    "deselectAll": "Cancel",
+    "download": "Download"
   },
   "fee": {
     "vip": "VIP",
@@ -46,7 +45,8 @@
   "detail": {
     "back": "Back",
     "playlistLabel": "Playlist",
-    "coverAlt": "Playlist Cover"
+    "coverAlt": "Playlist Cover",
+    "playCount": "plays"
   },
   "table": {
     "song": "Song",

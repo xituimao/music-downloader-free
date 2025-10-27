@@ -5,7 +5,8 @@
   "playlist": {
     "by": "by",
     "unknown": "未知",
-    "songCount": "共 {{count}} 首歌曲"
+    "songCount": "共 {{count}} 首歌曲",
+    "playCount": "播放"
   }
 }
 

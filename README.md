@@ -2,6 +2,8 @@
 
 一站式「搜索歌单、试听、批量下载」工具。基于 **Next.js SSR 架构**，SEO 友好，支持服务端渲染与静态生成。浏览器端完成打包，服务器零流量压力。
 
+🌐 **[在线体验](https://music-download-free-ol1pmbf2z-xituimaos-projects.vercel.app)** | 📖 [使用文档](https://music-download-free-ol1pmbf2z-xituimaos-projects.vercel.app/docs/guide)
+
 ## ✨ 功能特性
 
 - **首页热榜**: 展示热门歌单卡片，点击即进详情（SSR 渲染）
@@ -17,6 +19,8 @@
 - **文档页面**: 使用教程（`/docs/guide`）、音质科普（`/docs/quality`）
 
 提示：VIP/付费歌曲在未登录会员场景下通常仅能获取试听版（约30秒），界面与日志会明确标注。
+
+> 🚀 **当前版本**: v2.0 已部署到生产环境，支持中英文切换、完整SEO优化、GTM埋点追踪
 
 ## 🚀 快速开始
 
@@ -87,9 +91,9 @@ npm start
 - [音质科普](/docs/quality) - 音质格式说明（MP3/FLAC/APE 等）
 
 更多细节：
-- [使用指南.md](./docs/使用指南.md)
-- [播放器使用说明.md](./docs/播放器使用说明.md)
-- [VIP歌曲说明.md](./docs/VIP歌曲说明.md)
+- [使用指南](https://music-download-free-ol1pmbf2z-xituimaos-projects.vercel.app/docs/guide) / [本地文档](./docs/使用指南.md)
+- [播放器使用说明](./docs/播放器使用说明.md)
+- [VIP歌曲说明](./docs/VIP歌曲说明.md)
 
 ## 🛠 技术与架构
 
@@ -173,6 +177,12 @@ npm start
 
 ### Vercel 部署（推荐）
 
+**🚀 当前生产环境**
+- **部署状态**: ✅ 运行中
+- **生产域名**: `https://music-download-free-ol1pmbf2z-xituimaos-projects.vercel.app`
+- **部署配置**: 免费版优化（单区域 sfo1，API 超时 10 秒）
+- **构建日志**: [Vercel Dashboard](https://vercel.com/xituimaos-projects/music-download-free)
+
 **快速开始**：
 ```bash
 # 1. 安装 Vercel CLI
@@ -217,7 +227,9 @@ pm2 start npm --name "music-download" -- start
 - 默认端口 3000，可通过环境变量 `PORT` 修改
 - 若端口被占用，先清理进程再启动，避免多实例冲突 [[memory:10292525]]
 - 生产建议使用进程守护（如 pm2/systemd）
-- Vercel 部署后记得在 Google Search Console 提交 sitemap
+- Vercel 部署后记得在 Google Search Console 提交 sitemap：
+  - 站点URL：`https://music-download-free-ol1pmbf2z-xituimaos-projects.vercel.app`
+  - Sitemap：`https://music-download-free-ol1pmbf2z-xituimaos-projects.vercel.app/sitemap.xml`
 
 ## ❓常见问题（FAQ）
 
@@ -304,6 +316,8 @@ music-download/
 
 详细变化见：[SEO优化总结.md](./docs/SEO优化总结.md)
 
+> 🔍 **SEO 状态**: sitemap 和 robots.txt 已部署，Google Search Console 可提交验证
+
 ## ⚠️ 法律与合规
 
 - 本项目仅供学习与交流，请勿用于商业或任何侵权用途；请支持正版音乐。
@@ -312,6 +326,11 @@ music-download/
 ## 📄 License
 
 MIT
+
+## 🚀 部署状态
+
+[![Vercel Status](https://img.shields.io/badge/Vercel-Deployed-brightgreen)](https://music-download-free-ol1pmbf2z-xituimaos-projects.vercel.app)
+[![Version](https://img.shields.io/badge/Version-v2.0-blue)](https://music-download-free-ol1pmbf2z-xituimaos-projects.vercel.app)
 
 —— Made with ❤️ by 蓉儿 | 仅供学习交流使用
 

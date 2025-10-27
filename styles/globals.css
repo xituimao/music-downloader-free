@@ -413,6 +413,28 @@ main {
   color: var(--text-secondary);
 }
 
+.hot-playlist-card-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 8px;
+}
+
+.hot-playlist-card-stats .play-count,
+.hot-playlist-card-stats .update-time {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.hot-playlist-card-stats .play-count i,
+.hot-playlist-card-stats .update-time i {
+  font-size: 0.875rem;
+  opacity: 0.7;
+}
+
 /* 排序切换按钮组 */
 .order-tabs {
   display: flex;
@@ -437,14 +459,10 @@ main {
   transition: all 0.2s ease;
 }
 
-.order-tab:hover:not(:disabled) {
-  background: var(--spotify-hover);
-  color: var(--text-primary);
-}
 
 .order-tab.active {
   background: var(--spotify-green);
-  color: white;
+  color: var(--spotify-black);
 }
 
 .order-tab:disabled {
@@ -633,6 +651,26 @@ body.home-active main {
   font-size: 0.8rem;
 }
 
+.playlist-stats {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.playlist-card .play-count {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+}
+
+.playlist-card .play-count i {
+  font-size: 0.875rem;
+  opacity: 0.7;
+}
+
 /* ===== 歌单详情（Spotify风格）===== */
 .detail-section {
   animation: fadeIn 0.5s ease;
@@ -759,6 +797,18 @@ body.home-active main {
 
 .hero-stats .track-count {
   color: rgba(255, 255, 255, 0.8);
+}
+
+.hero-stats .play-count {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.hero-stats .play-count i {
+  font-size: 1rem;
+  opacity: 0.8;
 }
 
 /* 操作栏 */

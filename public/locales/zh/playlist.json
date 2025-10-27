@@ -2,8 +2,7 @@
   "actions": {
     "selectAll": "全选",
     "deselectAll": "取消全选",
-    "download": "下载",
-    "downloadSelected": "下载选中 ({{count}})"
+    "download": "下载"
   },
   "fee": {
     "vip": "VIP",
@@ -46,7 +45,8 @@
   "detail": {
     "back": "返回",
     "playlistLabel": "歌单",
-    "coverAlt": "歌单封面"
+    "coverAlt": "歌单封面",
+    "playCount": "播放"
   },
   "table": {
     "song": "歌曲",

@@ -4,7 +4,7 @@
 
 ### 方式一：HTML 标记验证（推荐）
 1. 访问 [Google Search Console](https://search.google.com/search-console)
-2. 添加资源 → 输入你的域名（如 `https://your-domain.vercel.app`）
+2. 添加资源 → 输入你的域名（如 `https://music-download-free-ol1pmbf2z-xituimaos-projects.vercel.app`）
 3. 选择"HTML 标记"验证方式
 4. 复制提供的 meta 标签，例如：
    ```html
@@ -22,7 +22,7 @@
 
 1. 验证成功后，进入 GSC 控制台
 2. 左侧菜单 → "站点地图"
-3. 输入 sitemap URL：`https://your-domain.vercel.app/sitemap.xml`
+3. 输入 sitemap URL：`https://music-download-free-ol1pmbf2z-xituimaos-projects.vercel.app/sitemap.xml`
 4. 点击"提交"
 
 ## 3. 监控与优化
@@ -43,7 +43,7 @@
 
 1. 访问 [Bing Webmaster Tools](https://www.bing.com/webmasters)
 2. 添加站点并验证（可导入 GSC 验证）
-3. 提交 sitemap：`https://your-domain.vercel.app/sitemap.xml`
+3. 提交 sitemap：`https://music-download-free-ol1pmbf2z-xituimaos-projects.vercel.app/sitemap.xml`
 
 ## 5. 百度站长平台（可选，国内用户）
 
