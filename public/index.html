@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>音乐下载助手 - 一键音乐下载</title>
+  <meta name="description" content="音乐下载助手：基于网易云音乐API，支持搜索歌单、预览播放与一键批量打包下载（本地ZIP生成，零服务器流量）。">
+  <meta name="keywords" content="音乐下载, 歌单下载, 网易云音乐, 批量下载, 在线打包, JSZip">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <meta name="theme-color" content="#111318">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:site_name" content="音乐下载助手">
+  <meta property="og:title" content="音乐下载助手 - 一键音乐下载">
+  <meta property="og:description" content="搜索歌单，一键批量下载；浏览器本地打包ZIP，稳定又省心。">
+  <meta property="og:url" content="https://your-domain.example/">
+  <meta property="og:image" content="https://your-domain.example/og-cover.png">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="音乐下载助手 - 一键音乐下载">
+  <meta name="twitter:description" content="搜索歌单，一键批量下载；浏览器本地打包ZIP，稳定又省心。">
+  <meta name="twitter:image" content="https://your-domain.example/og-cover.png">
+
+  <!-- Canonical -->
+  <link rel="canonical" href="https://your-domain.example/">
+
+  <!-- Favicon -->
+  <link rel="icon" href="/favicon.ico">
+  <link rel="stylesheet" href="remixicon.css">
+  <link rel="stylesheet" href="style.css">
+
+  <!-- 结构化数据：网站与站内搜索 -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "音乐下载助手",
+    "url": "https://your-domain.example/",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://your-domain.example/#search/{search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  }
+  </script>
+</head>
+<body>
+  <!-- 页面头部 -->
+  <header class="header">
+    <div class="container">
+      <h1>🎵 音乐下载助手</h1>
+      <p class="subtitle">搜索歌单，一键批量下载～</p>
+    </div>
+  </header>
+
+  <!-- 顶部导航栏 -->
+  <nav class="top-navbar">
+    <div class="navbar-container">
+        <!-- 左侧：Logo + 标题 -->
+        <div class="navbar-brand">
+          <a href="#" id="logoLink" class="logo-link">
+            <i class="ri-music-2-fill logo-icon"></i>
+            <span class="brand-name">一键音乐下载</span>
+          </a>
+        </div>
+      
+      <!-- 右侧：搜索框 -->
+      <div class="navbar-search">
+        <input 
+          type="text" 
+          id="searchInput" 
+          class="search-input" 
+          placeholder="搜索歌单..."
+          autocomplete="off"
+        >
+        <button id="searchBtn" class="btn btn-primary">搜索</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 主要内容区 -->
+  <main class="container">
+
+      <!-- 主页区域（Google风格） -->
+      <section id="homePage" class="home-section">
+        <!-- 居中搜索框 -->
+        <div class="home-search-wrapper">
+          <h1 class="home-logo">
+            <i class="ri-music-2-fill"></i>
+            <span>一键音乐下载</span>
+          </h1>
+          <div class="home-search-box">
+            <input 
+              type="text" 
+              id="homeSearchInput" 
+              class="home-search-input" 
+              placeholder="搜索歌单..."
+              autocomplete="off"
+            >
+            <button id="homeSearchBtn" class="home-search-btn">
+              <i class="ri-search-line"></i>
+            </button>
+          </div>
+        </div>
+        
+        <!-- 热门推荐歌单 -->
+        <div class="home-playlists">
+          <h2 class="home-section-title">
+            <i class="ri-fire-fill"></i>
+            <span>热门歌单推荐</span>
+          </h2>
+        <div id="hotPlaylistList" class="hot-playlist-grid">
+          <!-- 动态加载 -->
+        </div>
+      </div>
+    </section>
+
+    <!-- 搜索结果区域 -->
+    <section id="searchResults" class="results-section" style="display: none;">
+      <h2>搜索结果</h2>
+      <div id="playlistList" class="playlist-list"></div>
+    </section>
+
+    <!-- 歌单详情区域 -->
+    <section id="playlistDetail" class="detail-section" style="display: none;">
+      <!-- Spotify风格头部：大封面背景 -->
+      <div class="detail-hero">
+        <!-- 背景虚化大图 -->
+        <div id="playlistHeroBg" class="hero-bg"></div>
+        <!-- 渐变遮罩 -->
+        <div class="hero-overlay"></div>
+          <!-- 内容区 -->
+          <div class="hero-content">
+            <button id="backBtn" class="btn-back">
+              <i class="ri-arrow-left-line"></i>
+              <span>返回</span>
+            </button>
+          <div class="hero-info">
+            <img id="playlistCover" class="hero-cover" src="" alt="歌单封面">
+            <div class="hero-meta">
+              <p class="hero-label">歌单</p>
+              <h1 id="playlistName" class="hero-title"></h1>
+              <p id="playlistDesc" class="hero-desc"></p>
+              <div class="hero-stats">
+                <span id="playlistCreator" class="creator-name"></span>
+                <span class="separator">•</span>
+                <span id="playlistTrackCount" class="track-count"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 操作栏 -->
+      <div class="detail-actions">
+        <div class="actions-left">
+          <button id="selectAllBtn" class="btn btn-secondary">全选</button>
+          <button id="deselectAllBtn" class="btn btn-secondary" style="display: none;">取消全选</button>
+        </div>
+        <button id="downloadBtn" class="btn btn-primary">
+          <i class="ri-download-line"></i>
+          <span>下载</span>
+          <span id="downloadBadge" class="download-badge" style="display: none;">0</span>
+        </button>
+      </div>
+      
+      <!-- 歌曲列表 -->
+      <div class="song-list-wrapper">
+        <div class="song-list-header">
+          <span class="col-checkbox"></span>
+          <span class="col-index">#</span>
+          <span class="col-name">歌曲</span>
+          <span class="col-artist">歌手</span>
+          <span class="col-duration">时长</span>
+          <span class="col-play"></span>
+        </div>
+        <div id="songList" class="song-list"></div>
+      </div>
+    </section>
+
+    <!-- 下载进度区域 -->
+    <section id="downloadProgress" class="progress-section" style="display: none;">
+      <h3>下载进度</h3>
+      <div class="progress-bar-wrapper">
+        <div id="progressBar" class="progress-bar">
+          <div id="progressFill" class="progress-fill"></div>
+        </div>
+        <span id="progressText" class="progress-text">0/0</span>
+      </div>
+      <div id="downloadLog" class="download-log"></div>
+    </section>
+  </main>
+
+  <!-- 页脚 -->
+  <footer class="footer">
+    <p>Made with ❤️ by 蓉儿 | 仅供学习交流使用</p>
+  </footer>
+
+  <!-- 底部播放器 -->
+  <div class="player-bar" id="playerBar" style="display: none;">
+    <div class="player-info">
+      <img class="player-cover" id="playerCover" src="" alt="封面">
+      <div class="player-text">
+        <div class="player-name" id="playerSongName">未播放</div>
+        <div class="player-artist" id="playerArtistName">-</div>
+      </div>
+    </div>
+    
+    <div class="player-progress">
+      <span class="player-time" id="currentTime">0:00</span>
+      <div class="player-slider-container">
+        <input type="range" class="player-slider" id="progressSlider" min="0" max="100" value="0">
+      </div>
+      <span class="player-time" id="totalTime">0:00</span>
+    </div>
+    
+      <div class="player-controls">
+        <button class="player-btn" id="prevBtn" title="上一首">
+          <i class="ri-skip-back-fill"></i>
+        </button>
+        <button class="player-btn player-btn-main" id="playPauseBtn" title="播放/暂停">
+          <i class="ri-play-fill"></i>
+        </button>
+        <button class="player-btn" id="nextBtn" title="下一首">
+          <i class="ri-skip-forward-fill"></i>
+        </button>
+      </div>
+      
+      <div class="player-volume">
+        <button class="player-btn" id="volumeBtn" title="音量">
+          <i class="ri-volume-up-line"></i>
+        </button>
+        <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="80">
+      </div>
+      
+      <button class="player-btn player-close" id="closePlayerBtn" title="关闭播放器">
+        <i class="ri-close-line"></i>
+      </button>
+  </div>
+
+  <!-- HTML5 Audio Element -->
+  <audio id="audioPlayer" preload="metadata"></audio>
+
+  <!-- 引入JSZip库（客户端打包ZIP，本地文件） -->
+  <script src="jszip.min.js"></script>
+  
+  <!-- 引入JavaScript -->
+  <script src="app.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,1486 @@
+/**
+ * @Description: 音乐下载助手样式表
+ * @Author: 蓉儿
+ * 
+ * 设计理念：
+ * 1. 现代简约风格，色彩清新
+ * 2. 响应式布局，适配移动端
+ * 3. 流畅的交互动画
+ */
+
+/* ===== 全局样式 ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  /* Spotify 主题色 */
+  --spotify-green: #1DB954;
+  --spotify-green-hover: #1ed760;
+  --spotify-black: #121212;
+  --spotify-gray: #181818;
+  --spotify-light-gray: #282828;
+  --spotify-hover: #2a2a2a;
+  
+  /* 主题色（兼容） */
+  --primary-color: #1DB954;
+  --primary-hover: #1ed760;
+  --secondary-color: #1DB954;
+  --success-color: #1DB954;
+  --warning-color: #fed330;
+  --danger-color: #fc5c65;
+  
+  /* Spotify 中性色 */
+  --bg-color: #121212;
+  --card-bg: #181818;
+  --text-primary: #ffffff;
+  --text-secondary: #b3b3b3;
+  --border-color: #282828;
+  
+  /* 阴影 */
+  --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+  --shadow-lg: 0 8px 24px rgba(0,0,0,0.15);
+  
+  /* 圆角 */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  
+  /* 间距 */
+  --spacing-xs: 8px;
+  --spacing-sm: 12px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background: var(--bg-color);
+  color: var(--text-primary);
+  line-height: 1.6;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ===== 布局容器 ===== */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* ===== 隐藏原标题区域 ===== */
+.header {
+  display: none;
+}
+
+/* ===== 主内容区 ===== */
+main {
+  flex: 1;
+}
+
+/* ===== 主页样式（Google风格）===== */
+.home-section {
+  min-height: calc(100vh - 200px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 80px;
+}
+
+/* 主页搜索区域 */
+.home-search-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-xl);
+  margin-bottom: 60px;
+  width: 100%;
+}
+
+.home-logo {
+  font-size: 4rem;
+  font-weight: 400;
+  color: var(--text-primary);
+  margin: 0;
+  text-align: center;
+  letter-spacing: -0.02em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.home-logo i {
+  font-size: 4rem;
+  color: var(--spotify-green);
+}
+
+.home-search-box {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  width: 100%;
+  max-width: 600px;
+  background: var(--spotify-light-gray);
+  border-radius: 500px;
+  padding: 4px 4px 4px 24px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.home-search-box:hover,
+.home-search-box:focus-within {
+  background: var(--spotify-hover);
+  box-shadow: 0 4px 16px rgba(29, 185, 84, 0.2);
+}
+
+.home-search-input {
+  flex: 1;
+  padding: 14px 0;
+  border: none;
+  background: transparent;
+  font-size: 1rem;
+  color: var(--text-primary);
+  outline: none;
+}
+
+.home-search-input::placeholder {
+  color: var(--text-secondary);
+}
+
+.home-search-btn {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--spotify-green);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.home-search-btn:hover {
+  background: var(--spotify-green-hover);
+  transform: scale(1.05);
+}
+
+.home-search-btn i {
+  font-size: 1.25rem;
+}
+
+/* 热门歌单区域 */
+.home-playlists {
+  width: 100%;
+  max-width: 1200px;
+  padding: 0 var(--spacing-lg);
+}
+
+.home-section-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-lg);
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.home-section-title i {
+  font-size: 1.75rem;
+  color: #ff6b6b;
+}
+
+.hot-playlist-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-xl);
+}
+
+.hot-playlist-card {
+  background: var(--card-bg);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.hot-playlist-card:hover {
+  background: var(--spotify-hover);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.hot-playlist-card img {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: var(--radius-md);
+  object-fit: cover;
+  margin-bottom: var(--spacing-xs);
+}
+
+.hot-playlist-card-title {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  line-height: 1.4;
+  min-height: 2.8em;
+}
+
+.hot-playlist-card-count {
+  font-size: 0.813rem;
+  color: var(--text-secondary);
+}
+
+/* 主页状态：完全隐藏顶部导航栏 */
+body.home-active .top-navbar {
+  display: none;
+}
+
+/* 主页状态：调整主内容区padding（因为没有导航栏了） */
+body.home-active main {
+  padding-top: 0;
+}
+
+/* ===== 顶部导航栏 Spotify 风格（简洁sticky方案） ===== */
+.top-navbar {
+  position: sticky;
+  top: 0;
+  height: 64px;
+  background: var(--spotify-black);
+  border-bottom: 1px solid var(--border-color);
+  z-index: 1000;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.navbar-container {
+  height: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-lg);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-xl);
+}
+
+/* 左侧品牌区 */
+.navbar-brand {
+  flex-shrink: 0;
+}
+
+.logo-link {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  text-decoration: none;
+  color: var(--text-primary);
+  transition: opacity 0.2s ease;
+}
+
+.logo-link:hover {
+  opacity: 0.8;
+}
+
+.logo-icon {
+  font-size: 1.75rem;
+  color: var(--spotify-green);
+  filter: drop-shadow(0 0 8px rgba(29, 185, 84, 0.5));
+}
+
+.brand-name {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+
+/* 右侧搜索区 */
+.navbar-search {
+  flex: 1;
+  max-width: 500px;
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.navbar-search .search-input {
+  flex: 1;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 500px;
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
+  background: var(--spotify-light-gray);
+  color: var(--text-primary);
+  box-shadow: none;
+}
+
+.navbar-search .search-input:focus {
+  outline: none;
+  background: var(--spotify-hover);
+  box-shadow: 0 0 0 3px rgba(29, 185, 84, 0.3);
+}
+
+.navbar-search .search-input::placeholder {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}
+
+/* ===== Spotify 按钮样式 ===== */
+.btn {
+  padding: 8px 24px;
+  border: none;
+  border-radius: 500px;
+  font-size: 0.813rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn i {
+  font-size: 1rem;
+}
+
+.btn:hover {
+  transform: scale(1.04);
+}
+
+.btn:active {
+  transform: scale(0.96);
+}
+
+.btn-primary {
+  background: var(--spotify-green);
+  color: var(--spotify-black);
+}
+
+.btn-primary:hover {
+  background: var(--spotify-green-hover);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--text-primary);
+  border: 1px solid var(--text-secondary);
+}
+
+.btn-secondary:hover {
+  border-color: #fff;
+  color: #fff;
+}
+
+.btn-large {
+  padding: 14px 48px;
+  font-size: 1rem;
+  position: relative;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* ===== Spotify 徽章 ===== */
+.badge {
+  display: inline-block;
+  background: var(--spotify-green);
+  color: var(--spotify-black);
+  padding: 4px 12px;
+  border-radius: 500px;
+  font-size: 0.75rem;
+  margin-left: var(--spacing-xs);
+  font-weight: 700;
+}
+
+/* ===== Spotify 歌单列表 ===== */
+.results-section {
+  animation: fadeIn 0.5s ease;
+}
+
+.results-section h2 {
+  font-size: 1.5rem;
+  margin-bottom: var(--spacing-lg);
+  color: var(--text-primary);
+}
+
+.playlist-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-top: var(--spacing-lg);
+  background: transparent;
+  border-radius: 0;
+  box-shadow: none;
+  overflow: hidden;
+}
+
+.playlist-card {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
+  cursor: pointer;
+  transition: background 0.2s ease;
+  border-bottom: 1px solid var(--border-color);
+  border-radius: 4px;
+}
+
+.playlist-card:last-child {
+  border-bottom: 1px solid var(--border-color);
+}
+
+.playlist-card:hover {
+  background: var(--spotify-hover);
+}
+
+.playlist-card img {
+  width: 60px;
+  height: 60px;
+  border-radius: var(--radius-md);
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.playlist-card-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.playlist-card h3 {
+  font-size: 1rem;
+  margin-bottom: 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--text-primary);
+}
+
+.playlist-card .creator {
+  color: #26de81;
+  font-size: 0.85rem;
+  margin-bottom: 2px;
+}
+
+.playlist-card .track-count {
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+}
+
+/* ===== 歌单详情（Spotify风格）===== */
+.detail-section {
+  animation: fadeIn 0.5s ease;
+}
+
+/* Hero区域：大封面背景 */
+.detail-hero {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* 背景虚化大图 */
+.hero-bg {
+  position: absolute;
+  top: -50px;
+  left: -50px;
+  right: -50px;
+  bottom: -50px;
+  background-size: cover;
+  background-position: center;
+  filter: blur(40px);
+  opacity: 0.3;
+  z-index: 0;
+}
+
+/* 渐变遮罩 */
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(18, 18, 18, 0.2) 0%,
+    rgba(18, 18, 18, 0.8) 70%,
+    rgba(18, 18, 18, 1) 100%
+  );
+  z-index: 1;
+}
+
+/* 内容区 */
+.hero-content {
+  position: relative;
+  z-index: 2;
+  padding: var(--spacing-lg);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* 返回按钮（Spotify风格） */
+.btn-back {
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
+  border: none;
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 500px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: var(--spacing-lg);
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-back i {
+  font-size: 1rem;
+}
+
+.btn-back:hover {
+  background: rgba(0, 0, 0, 0.7);
+  transform: scale(1.04);
+}
+
+/* Hero信息区 */
+.hero-info {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--spacing-xl);
+}
+
+/* 封面（较大，带阴影） */
+.hero-cover {
+  width: 232px;
+  height: 232px;
+  border-radius: var(--radius-md);
+  object-fit: cover;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  flex-shrink: 0;
+}
+
+/* Meta信息 */
+.hero-meta {
+  flex: 1;
+}
+
+.hero-label {
+  font-size: 0.813rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #fff;
+  margin-bottom: var(--spacing-xs);
+  letter-spacing: 0.1em;
+}
+
+.hero-title {
+  font-size: 3rem;
+  font-weight: 900;
+  color: #fff;
+  margin: 0 0 var(--spacing-md) 0;
+  line-height: 1.2;
+  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+.hero-desc {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-bottom: var(--spacing-md);
+  max-height: 80px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+.hero-stats {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  font-size: 0.875rem;
+  color: #fff;
+  font-weight: 600;
+}
+
+.hero-stats .creator-name {
+  color: #fff;
+}
+
+.hero-stats .separator {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.hero-stats .track-count {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* 操作栏 */
+.detail-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: 0 var(--spacing-lg) var(--spacing-lg);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.actions-left {
+  display: flex;
+  gap: var(--spacing-sm);
+  align-items: center;
+  flex: 1;
+}
+
+/* 下载按钮：至少占1/3宽度 */
+.detail-actions #downloadBtn {
+  min-width: 33.333%;
+  flex-shrink: 0;
+  position: relative;
+}
+
+/* 下载按钮上的红色数字徽章 */
+.download-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  min-width: 20px;
+  height: 20px;
+  background: #ff4757;
+  color: #fff;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 6px;
+  box-shadow: 0 2px 8px rgba(255, 71, 87, 0.4);
+  animation: badgePop 0.3s ease;
+  z-index: 10;
+}
+
+@keyframes badgePop {
+  0% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* ===== 歌曲列表 Spotify 风格 ===== */
+.song-list-wrapper {
+  background: transparent;
+  border-radius: 0;
+  box-shadow: none;
+  overflow: hidden;
+}
+
+.song-list-header {
+  display: grid;
+  grid-template-columns: 40px 40px 2fr 1.2fr 80px 50px;
+  gap: var(--spacing-md);
+  padding: 10px var(--spacing-md);
+  background: transparent;
+  font-weight: 400;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border-color);
+  align-items: center;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+.song-list-header .col-duration{
+  text-align: right;
+}
+.song-list-header .col-index{
+  text-align: center;
+}
+
+/* 歌曲列表容器：不设置固定高度，让列表自然伸展，与页面整体共用一个滚动条（手机端友好） */
+.song-list {
+  background: transparent;
+}
+
+.song-item {
+  display: grid;
+  grid-template-columns: 40px 40px 2fr 1.2fr 80px 50px;
+  gap: var(--spacing-md);
+  padding: 8px var(--spacing-md);
+  border-bottom: none;
+  transition: all 0.2s ease;
+  align-items: center;
+  border-radius: 4px;
+  margin: 0 var(--spacing-xs);
+}
+
+.song-item:hover {
+  background: var(--spotify-hover);
+}
+
+.song-item:last-child {
+  border-bottom: none;
+}
+
+.song-checkbox {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: var(--spotify-green);
+  border: 2px solid var(--text-secondary);
+  border-radius: 2px;
+}
+
+.song-index {
+  color: var(--text-secondary);
+  text-align: center;
+  font-size: 0.9rem;
+  font-weight: 400;
+}
+
+.song-name {
+  font-weight: 400;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #fff;
+}
+
+.song-artist,
+.song-album {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.song-duration {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  text-align: right;
+  font-weight: 400;
+}
+
+/* VIP歌曲样式 */
+.vip-song {
+  color: #d32f2f !important;
+  font-weight: 500;
+}
+
+.vip-badge {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 2px 6px;
+  font-size: 10px;
+  font-weight: bold;
+  color: #fff;
+  background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+  border-radius: 3px;
+  transform: scale(0.9);
+  box-shadow: 0 1px 3px rgba(238, 90, 36, 0.3);
+  animation: vipPulse 2s ease-in-out infinite;
+}
+
+@keyframes vipPulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+/* ===== 下载进度 ===== */
+.progress-section {
+  background: var(--card-bg);
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  margin-top: var(--spacing-lg);
+  animation: fadeIn 0.5s ease;
+}
+
+.progress-section h3 {
+  margin-bottom: var(--spacing-md);
+}
+
+.progress-bar-wrapper {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+.progress-bar {
+  flex: 1;
+  height: 24px;
+  background: var(--bg-color);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+  transition: width 0.3s ease;
+  width: 0%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  color: white;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding-right: var(--spacing-sm);
+}
+
+.progress-text {
+  font-weight: 600;
+  color: var(--text-primary);
+  min-width: 80px;
+  text-align: right;
+}
+
+.download-log {
+  max-height: 300px;
+  overflow-y: auto;
+  background: var(--bg-color);
+  padding: var(--spacing-md);
+  border-radius: var(--radius-md);
+  font-family: 'Courier New', monospace;
+  font-size: 0.85rem;
+  line-height: 1.8;
+}
+
+.log-item {
+  padding: 4px 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.log-item:last-child {
+  border-bottom: none;
+}
+
+.log-success {
+  color: var(--success-color);
+}
+
+.log-error {
+  color: var(--danger-color);
+}
+
+.log-info {
+  color: var(--text-secondary);
+}
+
+.log-warn {
+  color: #ff9800;
+  font-weight: 500;
+}
+
+/* ===== Spotify 页脚 ===== */
+.footer {
+  background: transparent;
+  padding: var(--spacing-lg);
+  text-align: center;
+  color: var(--text-secondary);
+  border-top: 1px solid var(--border-color);
+  margin-top: var(--spacing-xl);
+  margin-bottom: 100px; /* 为播放器留出空间 */
+  font-size: 0.875rem;
+}
+
+/* ===== Spotify 播放器样式 ===== */
+.player-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 90px;
+  background: var(--spotify-gray);
+  border-top: 1px solid var(--border-color);
+  box-shadow: 0 -2px 20px rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  padding: 0 var(--spacing-md);
+  gap: var(--spacing-lg);
+  z-index: 1000;
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.player-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 200px;
+  max-width: 300px;
+  flex-shrink: 0;
+}
+
+.player-cover {
+  width: 50px;
+  height: 50px;
+  border-radius: 8px;
+  object-fit: cover;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  flex-shrink: 0;
+}
+
+.player-text {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.player-name {
+  color: #fff;
+  font-weight: 600;
+  font-size: 14px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-bottom: 4px;
+  width: 100%;
+}
+
+.player-artist {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 100%;
+}
+
+.player-controls {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.player-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  padding: 0;
+}
+
+.player-btn i {
+  font-size: 18px;
+}
+
+.player-btn:hover {
+  color: #fff;
+  transform: scale(1.06);
+}
+
+.player-btn-main {
+  width: 32px;
+  height: 32px;
+  background: var(--spotify-green);
+  color: var(--spotify-black);
+  font-weight: bold;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.player-btn-main i {
+  font-size: 20px;
+}
+
+.player-btn-main:hover {
+  transform: scale(1.06);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.player-progress {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  min-width: 200px;
+}
+
+.player-time {
+  color: var(--text-secondary);
+  font-size: 11px;
+  min-width: 40px;
+  text-align: center;
+  font-weight: 400;
+}
+
+/* 进度条容器：不设置背景色，避免与slider轨道渐变重叠造成双进度条 */
+.player-slider-container {
+  flex: 1;
+  height: 4px;
+  border-radius: 2px;
+  overflow: visible;
+  position: relative;
+}
+
+.player-slider {
+  width: 100%;
+  height: 4px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  outline: none;
+  margin: 0;
+  cursor: pointer;
+  position: relative;
+  z-index: 2;
+}
+
+.player-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #fff;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  transition: transform 0.1s;
+  opacity: 0;
+}
+
+.player-slider-container:hover .player-slider::-webkit-slider-thumb {
+  opacity: 1;
+}
+
+.player-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+.player-slider::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #fff;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  opacity: 0;
+}
+
+.player-slider-container:hover .player-slider::-moz-range-thumb {
+  opacity: 1;
+}
+
+.player-slider::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(to right, 
+    var(--spotify-green) 0%, 
+    var(--spotify-green) var(--progress, 0%), 
+    #4d4d4d var(--progress, 0%), 
+    #4d4d4d 100%
+  );
+  border-radius: 2px;
+}
+
+.player-slider-container:hover::-webkit-slider-runnable-track {
+  background: linear-gradient(to right, 
+    var(--spotify-green-hover) 0%, 
+    var(--spotify-green-hover) var(--progress, 0%), 
+    #4d4d4d var(--progress, 0%), 
+    #4d4d4d 100%
+  );
+}
+
+.player-volume {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.volume-slider {
+  width: 80px;
+  height: 4px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
+  outline: none;
+  cursor: pointer;
+}
+
+.volume-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #fff;
+  cursor: pointer;
+}
+
+.volume-slider::-moz-range-thumb {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #fff;
+  cursor: pointer;
+  border: none;
+}
+
+.player-close {
+  margin-left: auto;
+  opacity: 0.8;
+}
+
+.player-close:hover {
+  opacity: 1;
+}
+
+/* Spotify 播放按钮样式 */
+.play-btn {
+  background: transparent;
+  border: 1px solid var(--text-secondary);
+  color: var(--text-secondary);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  padding: 0;
+  opacity: 1; /* 始终显示，移动端友好 */
+  box-shadow: none;
+}
+
+.play-btn i {
+  font-size: 14px;
+  margin-left: 2px;
+}
+
+/* 悬停时高亮 */
+.song-item:hover .play-btn,
+.play-btn:hover {
+  background: var(--spotify-green);
+  border-color: var(--spotify-green);
+  color: var(--spotify-black);
+  transform: scale(1.08);
+  box-shadow: 0 4px 12px rgba(29, 185, 84, 0.3);
+}
+
+.play-btn:active {
+  transform: scale(0.95);
+}
+
+/* ===== Spotify 滚动条美化 ===== */
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #4d4d4d;
+  border-radius: 6px;
+  border: 3px solid var(--spotify-black);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #5a5a5a;
+}
+
+/* ===== 动画 ===== */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===== 响应式设计（移动端优先） ===== */
+@media (max-width: 768px) {
+  .top-navbar {
+    height: 56px;
+  }
+  
+  .navbar-container {
+    padding: 0 var(--spacing-md);
+    gap: var(--spacing-md);
+  }
+  
+  .logo-icon {
+    font-size: 1.5rem;
+  }
+  
+  .brand-name {
+    font-size: 0.938rem;
+  }
+  
+  .navbar-search {
+    max-width: 300px;
+  }
+  
+  .navbar-search .search-input {
+    font-size: 0.813rem;
+    padding: 8px 16px;
+  }
+  
+  .btn {
+    padding: 6px 16px;
+    font-size: 0.75rem;
+  }
+  
+  /* 主页移动端样式 */
+  .home-section {
+    padding-top: 40px;
+  }
+  
+  .home-logo {
+    font-size: 2.5rem;
+  }
+  
+  .home-search-wrapper {
+    padding: 0 var(--spacing-md);
+    margin-bottom: 40px;
+  }
+  
+  .home-search-box {
+    max-width: 100%;
+  }
+  
+  .home-playlists {
+    padding: 0 var(--spacing-md);
+  }
+  
+  .hot-playlist-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: var(--spacing-md);
+  }
+  
+  /* 歌单详情Hero区域移动端 */
+  .hero-content {
+    padding: var(--spacing-lg);
+  }
+  
+  .hero-info {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .hero-cover {
+    width: 150px;
+    height: 150px;
+  }
+  
+  .hero-title {
+    font-size: 2rem;
+  }
+  
+  .detail-actions {
+    padding: 0 var(--spacing-md) var(--spacing-md);
+    gap: var(--spacing-sm);
+  }
+  
+  .actions-left {
+    flex: 1;
+    min-width: 0;
+  }
+  
+  .actions-left .btn {
+    flex: 1;
+    font-size: 0.75rem;
+    padding: 8px 12px;
+    white-space: nowrap;
+  }
+  
+  /* 移动端下载按钮保持至少1/3宽度 */
+  .detail-actions #downloadBtn {
+    min-width: 35%;
+    flex-shrink: 0;
+  }
+  
+  /* 移动端徽章稍小 */
+  .download-badge {
+    top: -6px;
+    right: -6px;
+    min-width: 18px;
+    height: 18px;
+    font-size: 10px;
+    padding: 0 5px;
+  }
+  
+  .playlist-cover {
+    width: 100%;
+    height: auto;
+  }
+  
+  .song-list-header,
+  .song-item {
+    grid-template-columns: 30px 30px 2fr 80px 40px;
+    font-size: 0.85rem;
+    padding: 8px var(--spacing-sm);
+    margin: 0;
+  }
+  
+  .col-artist,
+  .song-artist {
+    display: none;
+  }
+  
+  .actions {
+    flex-direction: column;
+  }
+  
+  .btn-large {
+    width: 100%;
+  }
+  
+  /* 移动端播放器精简版 */
+  .player-bar {
+    height: 60px;
+    padding: 0 12px;
+    gap: 0;
+    justify-content: space-between;
+  }
+  
+  .player-info {
+    flex: 0 1 auto;
+    min-width: 0;
+    max-width: 50%;
+    margin-right: 10px;
+  }
+  
+  .player-cover {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .player-text {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+  }
+  
+  .player-name {
+    font-size: 13px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+  }
+  
+  .player-artist {
+    font-size: 11px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+  }
+  
+  /* 移动端隐藏音量、上一曲、关闭按钮 */
+  .player-volume,
+  .player-close,
+  #prevBtn {
+    display: none !important;
+  }
+  
+  /* 移动端进度区：只显示时间文字，不显示进度条 */
+  .player-progress {
+    display: flex !important;
+    align-items: center;
+    gap: 0;
+    min-width: auto;
+    flex: 0 0 auto;
+  }
+  
+  /* 隐藏进度滑块和当前时间 */
+  .player-slider-container,
+  #currentTime {
+    display: none !important;
+  }
+  
+  /* 只显示剩余/总时长 */
+  #totalTime {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.9);
+    white-space: nowrap;
+    margin-right: 10px;
+  }
+  
+  .player-controls {
+    gap: 6px;
+    flex-shrink: 0;
+  }
+  
+  .player-btn {
+    width: 32px;
+    height: 32px;
+    font-size: 22px;
+  }
+  
+  .player-btn-main {
+    width: 36px;
+    height: 36px;
+    font-size: 32px;
+  }
+  
+  .footer {
+    margin-bottom: 70px;
+  }
+}
+
