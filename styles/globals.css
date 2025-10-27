@@ -81,14 +81,156 @@ body {
   white-space: nowrap;
 }
 
-/* 圆形按钮基础样式 */
-.btn-circle {
-  border-radius: 50%;
-  display: flex;
+/* ===== 按钮基础样式系统（统一规范）===== */
+/**
+ * 按钮设计原则：
+ * 1. 基础类 .btn 提供核心样式
+ * 2. 修饰符类（.btn-*）提供变体样式
+ * 3. 所有按钮遵循 Spotify 设计规范
+ * 4. 统一使用 CSS 变量，便于主题切换
+ */
+
+/* 按钮基础类：所有按钮的通用样式 */
+.btn {
+  /* 布局 */
+  display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 8px;
+  
+  /* 尺寸 */
+  padding: 10px 24px;
+  min-height: 40px;
+  
+  /* 外观 */
+  border: none;
+  border-radius: 500px; /* Spotify 特色：超圆角 */
+  background: var(--spotify-green);
+  color: var(--spotify-black);
+  
+  /* 文字 */
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  white-space: nowrap;
+  text-decoration: none;
+  
+  /* 交互 */
   cursor: pointer;
-  transition: all 0.2s ease;
+  user-select: none;
+  transition: all 0.2s cubic-bezier(0.3, 0, 0.5, 1);
+  
+  /* 其他 */
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+
+.btn:hover:not(:disabled) {
+  background: var(--spotify-green-hover);
+  transform: scale(1.04);
+}
+
+.btn:active:not(:disabled) {
+  transform: scale(0.96);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.btn i {
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+/* 按钮变体：主要按钮（默认绿色，已在基础类中） */
+.btn-primary {
+  background: var(--spotify-green);
+  color: var(--spotify-black);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: var(--spotify-green-hover);
+}
+
+/* 按钮变体：次要按钮（透明边框） */
+.btn-secondary {
+  background: transparent;
+  color: var(--text-primary);
+  border: 1px solid var(--text-secondary);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: var(--spotify-hover);
+  border-color: var(--text-primary);
+  color: var(--text-primary);
+}
+
+/* 按钮变体：大按钮 */
+.btn-lg {
+  padding: 14px 48px;
+  min-height: 48px;
+  font-size: 1rem;
+}
+
+/* 按钮变体：小按钮 */
+.btn-sm {
+  padding: 6px 16px;
+  min-height: 32px;
+  font-size: 0.75rem;
+}
+
+/* 按钮变体：超小按钮（用于移动端） */
+.btn-xs {
+  padding: 4px 12px;
+  min-height: 28px;
+  font-size: 0.688rem;
+}
+
+/* 按钮变体：圆形按钮（图标按钮） */
+.btn-circle {
+  padding: 0;
+  min-height: auto;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.btn-circle.btn-sm {
+  width: 32px;
+  height: 32px;
+}
+
+.btn-circle.btn-lg {
+  width: 48px;
+  height: 48px;
+}
+
+/* 按钮变体：返回按钮（带毛玻璃效果） */
+.btn-back {
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
+  color: #fff;
+  border: none;
+}
+
+.btn-back:hover:not(:disabled) {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+/* 按钮变体：透明按钮 */
+.btn-ghost {
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid transparent;
+}
+
+.btn-ghost:hover:not(:disabled) {
+  background: var(--spotify-hover);
+  color: var(--text-primary);
 }
 
 /* Hover效果：Spotify灰色背景 */
@@ -186,17 +328,12 @@ main {
   color: var(--text-secondary);
 }
 
+/* 主页搜索按钮：使用统一按钮系统 */
 .home-search-btn {
+  /* 继承 .btn 和 .btn-circle 的样式 */
   width: 48px;
   height: 48px;
-  background: var(--spotify-green);
-  border: none;
   flex-shrink: 0;
-}
-
-.home-search-btn:hover {
-  background: var(--spotify-green-hover);
-  transform: scale(1.05);
 }
 
 .home-search-btn i {
@@ -265,6 +402,7 @@ main {
   text-overflow: ellipsis;
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   line-height: 1.4;
   min-height: 2.8em;
@@ -414,63 +552,7 @@ body.home-active main {
   font-size: 0.875rem;
 }
 
-/* ===== Spotify 按钮样式 ===== */
-.btn {
-  padding: 8px 24px;
-  border: none;
-  border-radius: 500px;
-  font-size: 0.813rem;
-  font-weight: 700;
-  transition: all 0.2s ease;
-  white-space: nowrap;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  flex-shrink: 0;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-}
-
-.btn i {
-  font-size: 1rem;
-}
-
-.btn:active {
-  transform: scale(0.96);
-}
-
-.btn-primary {
-  background: var(--spotify-green);
-  color: var(--spotify-black);
-}
-
-.btn-primary:hover {
-  background: var(--spotify-green-hover);
-}
-
-.btn-secondary {
-  background: transparent;
-  color: var(--text-primary);
-  border: 1px solid var(--text-secondary);
-}
-
-.btn-secondary:hover {
-  border-color: #fff;
-  color: #fff;
-}
-
-.btn-large {
-  padding: 14px 48px;
-  font-size: 1rem;
-  position: relative;
-}
-
-.btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-  transform: none !important;
-}
+/* 【已废弃】按钮样式已统一到前面的按钮基础样式系统 */
 
 /* ===== Spotify 徽章 ===== */
 .badge {
@@ -599,31 +681,9 @@ body.home-active main {
   margin: 0 auto;
 }
 
-/* 返回按钮（Spotify风格） */
+/* 返回按钮额外样式（基础样式在按钮系统中） */
 .btn-back {
-  background: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(10px);
-  border: none;
-  color: #fff;
-  padding: 8px 16px;
-  border-radius: 500px;
-  font-size: 0.875rem;
-  font-weight: 600;
-  cursor: pointer;
   margin-bottom: var(--spacing-lg);
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.btn-back i {
-  font-size: 1rem;
-}
-
-.btn-back:hover {
-  background: rgba(0, 0, 0, 0.7);
-  transform: scale(1.04);
 }
 
 /* Hero信息区 */
@@ -676,6 +736,7 @@ body.home-active main {
   text-overflow: ellipsis;
   display: -webkit-box;
   -webkit-line-clamp: 3;
+  line-clamp: 3;
   -webkit-box-orient: vertical;
 }
 
@@ -1102,30 +1163,27 @@ body.home-active main {
   align-items: center;
 }
 
+/* 播放器按钮：统一继承 .btn 样式系统 */
 .player-btn {
+  /* 使用 .btn .btn-circle .btn-ghost 组合 */
   background: transparent;
-  border: none;
   color: var(--text-secondary);
   width: 32px;
   height: 32px;
-  padding: 0;
 }
 
 .player-btn i {
   font-size: 18px;
 }
 
-.player-btn:hover {
+.player-btn:hover:not(:disabled) {
   color: #fff;
-  transform: scale(1.06);
 }
 
 .player-btn-main {
+  /* 使用 .btn .btn-circle 组合 */
   width: 32px;
   height: 32px;
-  background: var(--spotify-green);
-  color: var(--spotify-black);
-  font-weight: bold;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
@@ -1133,8 +1191,7 @@ body.home-active main {
   font-size: 20px;
 }
 
-.player-btn-main:hover {
-  transform: scale(1.06);
+.player-btn-main:hover:not(:disabled) {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 
@@ -1266,14 +1323,14 @@ body.home-active main {
   opacity: 1;
 }
 
-/* Spotify 播放按钮样式 */
+/* 歌曲列表播放按钮：统一继承 .btn 样式系统 */
 .play-btn {
+  /* 使用 .btn .btn-circle .btn-secondary 组合 */
   background: transparent;
   border: 1px solid var(--text-secondary);
   color: var(--text-secondary);
   width: 32px;
   height: 32px;
-  padding: 0;
   opacity: 1; /* 始终显示，移动端友好 */
   box-shadow: none;
 }
@@ -1283,9 +1340,9 @@ body.home-active main {
   margin-left: 2px;
 }
 
-/* 悬停时高亮 */
+/* 悬停时高亮：覆盖默认 hover */
 .song-item:hover .play-btn,
-.play-btn:hover {
+.play-btn:hover:not(:disabled) {
   background: var(--spotify-green);
   border-color: var(--spotify-green);
   color: var(--spotify-black);
@@ -1293,7 +1350,7 @@ body.home-active main {
   box-shadow: 0 4px 12px rgba(29, 185, 84, 0.3);
 }
 
-.play-btn:active {
+.play-btn:active:not(:disabled) {
   transform: scale(0.95);
 }
 
@@ -1357,8 +1414,10 @@ body.home-active main {
     padding: 8px 16px;
   }
   
-  .btn {
+  /* 移动端按钮默认使用小尺寸 */
+  .btn:not(.btn-lg):not(.btn-xs) {
     padding: 6px 16px;
+    min-height: 32px;
     font-size: 0.75rem;
   }
   
@@ -1463,7 +1522,8 @@ body.home-active main {
     flex-direction: column;
   }
   
-  .btn-large {
+  /* 移动端大按钮全宽 */
+  .btn-lg {
     width: 100%;
   }
   

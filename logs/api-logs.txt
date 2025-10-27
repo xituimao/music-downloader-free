@@ -1,0 +1,56 @@
+2025-10-27T07:58:17.952Z - 开始请求热门歌单API: {
+  "cat": "全部",
+  "limit": "20",
+  "offset": "0",
+  "order": "new"
+}
+2025-10-27T07:58:17.995Z - API响应完成: {
+  "timeMs": 43,
+  "resultCode": 200,
+  "playlistCount": 0
+}
+2025-10-27T07:58:19.232Z - 开始请求热门歌单API: {
+  "cat": "全部",
+  "limit": "20",
+  "offset": "0",
+  "order": "hot"
+}
+2025-10-27T07:58:19.325Z - API响应完成: {
+  "timeMs": 93,
+  "resultCode": 200,
+  "playlistCount": 20
+}
+2025-10-27T07:58:19.326Z - 歌单数据结构: {
+  "createTime": 1409379332621,
+  "updateTime": 1641178920444,
+  "trackUpdateTime": 1758767086765
+}
+2025-10-27T07:58:19.326Z - 热门排序，使用API原始排序结果
+2025-10-27T07:58:25.094Z - 开始请求热门歌单API: {
+  "cat": "全部",
+  "limit": "20",
+  "offset": "0",
+  "order": "new"
+}
+2025-10-27T07:58:25.145Z - API响应完成: {
+  "timeMs": 51,
+  "resultCode": 200,
+  "playlistCount": 0
+}
+2025-10-27T07:58:25.852Z - 开始请求热门歌单API: {
+  "cat": "全部",
+  "limit": "20",
+  "offset": "0",
+  "order": "hot"
+}
+2025-10-27T07:58:25.959Z - API响应完成: {
+  "timeMs": 107,
+  "resultCode": 200,
+  "playlistCount": 20
+}
+2025-10-27T07:58:25.960Z - 歌单数据结构: {
+  "createTime": 1409379332621,
+  "updateTime": 1641178920444,
+  "trackUpdateTime": 1758767086765
+}
+2025-10-27T07:58:25.960Z - 热门排序，使用API原始排序结果

@@ -34,7 +34,29 @@
     "currentTime": "当前时间",
     "duration": "总时长",
     "noSong": "暂无歌曲",
-    "unknown": "未知"
+    "unknown": "未知",
+    "close": "关闭播放器",
+    "alreadyFirst": "已经是第一首了",
+    "alreadyLast": "已经是最后一首了",
+    "cannotPlay": "无法播放：{{name}}",
+    "playFailed": "播放失败",
+    "loadFailed": "音频加载失败",
+    "networkError": "播放失败，可能是网络问题或该歌曲暂不支持播放"
+  },
+  "detail": {
+    "back": "返回",
+    "playlistLabel": "歌单",
+    "coverAlt": "歌单封面"
+  },
+  "table": {
+    "song": "歌曲",
+    "artist": "歌手",
+    "duration": "时长",
+    "unknownArtist": "未知歌手"
+  },
+  "alert": {
+    "packagingComplete": "✓ 打包完成！\n成功: {{success}} 首\n失败: {{fail}} 首\n\nZIP文件已开始下载！",
+    "downloadFailed": "下载失败: {{message}}"
   }
 }
 

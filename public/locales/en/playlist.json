@@ -34,7 +34,29 @@
     "currentTime": "Current time",
     "duration": "Duration",
     "noSong": "No song",
-    "unknown": "Unknown"
+    "unknown": "Unknown",
+    "close": "Close Player",
+    "alreadyFirst": "Already the first song",
+    "alreadyLast": "Already the last song",
+    "cannotPlay": "Cannot play: {{name}}",
+    "playFailed": "Play failed",
+    "loadFailed": "Audio loading failed",
+    "networkError": "Playback failed, possibly due to network issues or unsupported song"
+  },
+  "detail": {
+    "back": "Back",
+    "playlistLabel": "Playlist",
+    "coverAlt": "Playlist Cover"
+  },
+  "table": {
+    "song": "Song",
+    "artist": "Artist",
+    "duration": "Duration",
+    "unknownArtist": "Unknown Artist"
+  },
+  "alert": {
+    "packagingComplete": "✓ Packaging complete!\nSuccess: {{success}}\nFailed: {{fail}}\n\nZIP file download started!",
+    "downloadFailed": "Download failed: {{message}}"
   }
 }
 

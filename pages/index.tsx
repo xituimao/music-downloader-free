@@ -69,9 +69,9 @@ export default function Home({ initialPlaylists, initialOrder }: HomeProps) {
 
   const formatPlayCount = (count: number) => {
     if (count >= 100000000) {
-      return (count / 100000000).toFixed(1) + '亿'
+      return (count / 100000000).toFixed(1) + t('home:playCount.hundredMillion')
     } else if (count >= 10000) {
-      return (count / 10000).toFixed(1) + '万'
+      return (count / 10000).toFixed(1) + t('home:playCount.tenThousand')
     } else {
       return count.toString()
     }
@@ -149,7 +149,7 @@ export default function Home({ initialPlaylists, initialOrder }: HomeProps) {
             />
             <button
               id="homeSearchBtn"
-              className="home-search-btn"
+              className="btn btn-circle home-search-btn"
               onClick={handleHomeSearch}
             >
               <i className="ri-search-line"></i>
@@ -172,7 +172,7 @@ export default function Home({ initialPlaylists, initialOrder }: HomeProps) {
                 disabled={loading}
               >
                 <i className="ri-fire-fill"></i>
-                <span>热门</span>
+                <span>{t('home:order.hot')}</span>
               </button>
               <button 
                 className={`order-tab ${order === 'new' ? 'active' : ''}`}
@@ -180,7 +180,7 @@ export default function Home({ initialPlaylists, initialOrder }: HomeProps) {
                 disabled={loading}
               >
                 <i className="ri-time-fill"></i>
-                <span>最新</span>
+                <span>{t('home:order.new')}</span>
               </button>
             </div>
           </div>
@@ -191,7 +191,7 @@ export default function Home({ initialPlaylists, initialOrder }: HomeProps) {
               </p>
             ) : hotPlaylists.length === 0 ? (
               <p style={{ textAlign: 'center', color: '#999', gridColumn: '1/-1' }}>
-                暂无数据
+                {t('home:noData')}
               </p>
             ) : (
               hotPlaylists.map((playlist) => (

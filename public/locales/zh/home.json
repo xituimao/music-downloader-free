@@ -3,6 +3,15 @@
   "subtitle": "搜索歌单，在线预览与一键批量下载",
   "hotPlaylist": {
     "title": "热门歌单推荐"
+  },
+  "order": {
+    "hot": "热门",
+    "new": "最新"
+  },
+  "noData": "暂无数据",
+  "playCount": {
+    "hundredMillion": "亿",
+    "tenThousand": "万"
   }
 }
 

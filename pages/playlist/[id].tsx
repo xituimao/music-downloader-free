@@ -219,12 +219,12 @@ export default function PlaylistPage({ playlist }: { playlist: Playlist | null }
         window.URL.revokeObjectURL(url)
       }, 100)
 
-      alert(`✓ 打包完成！\n成功: ${successCount} 首\n失败: ${failCount} 首\n\nZIP文件已开始下载！`)
+      alert(t('playlist:alert.packagingComplete', { success: successCount, fail: failCount }))
       
       // 全部完成后重置状态
       setCompletedIds(new Set())
     } catch (error: any) {
-      alert(`下载失败: ${error.message}`)
+      alert(t('playlist:alert.downloadFailed', { message: error.message }))
     } finally {
       setIsDownloading(false)
       setDownloadingId(null)
@@ -247,7 +247,7 @@ export default function PlaylistPage({ playlist }: { playlist: Playlist | null }
       const urlData = await fetch(`/api/song/url?ids=${song.id}&level=exhigh`).then(r => r.json())
       const songUrl = urlData.data?.[0]?.url
       if (!songUrl) {
-        alert(`无法播放：${song.name}`)
+        alert(t('playlist:player.cannotPlay', { name: song.name }))
         return
       }
 
@@ -263,7 +263,7 @@ export default function PlaylistPage({ playlist }: { playlist: Playlist | null }
         console.log(`🎵 正在播放VIP歌曲试听版：${song.name}`)
       }
     } catch (error) {
-      alert(`播放失败`)
+      alert(t('playlist:player.playFailed'))
     }
   }
 
@@ -281,7 +281,7 @@ export default function PlaylistPage({ playlist }: { playlist: Playlist | null }
     if (currentIndex > 0) {
       playSongAtIndex(currentIndex - 1)
     } else {
-      alert('已经是第一首了')
+      alert(t('playlist:player.alreadyFirst'))
     }
   }
 
@@ -289,7 +289,7 @@ export default function PlaylistPage({ playlist }: { playlist: Playlist | null }
     if (currentIndex < (playlist.tracks?.length || 0) - 1) {
       playSongAtIndex(currentIndex + 1)
     } else {
-      alert('已经是最后一首了')
+      alert(t('playlist:player.alreadyLast'))
     }
   }
 
@@ -397,18 +397,18 @@ export default function PlaylistPage({ playlist }: { playlist: Playlist | null }
             ></div>
             <div className="hero-overlay"></div>
             <div className="hero-content">
-              <button className="btn-back" onClick={() => router.back()}>
+              <button className="btn btn-back" onClick={() => router.back()}>
                 <i className="ri-arrow-left-line"></i>
-                <span>返回</span>
+                <span>{t('playlist:detail.back')}</span>
               </button>
               <div className="hero-info">
                 <img
                   className="hero-cover"
                   src={optimizeImageUrl(playlist.coverImgUrl, 400)}
-                  alt="歌单封面"
+                  alt={t('playlist:detail.coverAlt')}
                 />
                 <div className="hero-meta">
-                  <p className="hero-label">歌单</p>
+                  <p className="hero-label">{t('playlist:detail.playlistLabel')}</p>
                   <h1 className="hero-title">{playlist.name}</h1>
                   <p className="hero-desc">{playlist.description || ''}</p>
                   <div className="hero-stats">
@@ -460,14 +460,14 @@ export default function PlaylistPage({ playlist }: { playlist: Playlist | null }
             <div className="song-list-header">
               <span className="col-checkbox"></span>
               <span className="col-index">#</span>
-              <span className="col-name">歌曲</span>
-              <span className="col-artist">歌手</span>
-              <span className="col-duration">时长</span>
+              <span className="col-name">{t('playlist:table.song')}</span>
+              <span className="col-artist">{t('playlist:table.artist')}</span>
+              <span className="col-duration">{t('playlist:table.duration')}</span>
               <span className="col-play"></span>
             </div>
             <div className="song-list">
               {(playlist.tracks || []).map((song, index) => {
-                const artists = song.ar?.map(ar => ar.name).join(', ') || '未知歌手'
+                const artists = song.ar?.map(ar => ar.name).join(', ') || t('playlist:table.unknownArtist')
                 const isVip = isVipSong(song)
                 const feeTag = getFeeTypeText(song.fee)
                 // 判断当前歌曲的下载状态
@@ -488,10 +488,10 @@ export default function PlaylistPage({ playlist }: { playlist: Playlist | null }
                       {feeTag && <span className="vip-badge">{feeTag}</span>}
                       {/* 下载状态图标 */}
                       {isCurrentDownloading && (
-                        <i className="ri-loader-4-line song-status-icon downloading" title="下载中"></i>
+                        <i className="ri-loader-4-line song-status-icon downloading" title={t('playlist:download.downloading', { name: '' })}></i>
                       )}
                       {isCompleted && !isCurrentDownloading && (
-                        <i className="ri-checkbox-circle-fill song-status-icon completed" title="已完成"></i>
+                        <i className="ri-checkbox-circle-fill song-status-icon completed" title={t('common:loading')}></i>
                       )}
                     </span>
                     <span className="song-artist" title={artists}>
@@ -499,9 +499,9 @@ export default function PlaylistPage({ playlist }: { playlist: Playlist | null }
                     </span>
                     <span className="song-duration">{formatDuration(song.dt)}</span>
                     <button
-                      className="play-btn"
+                      className="btn btn-circle play-btn"
                       onClick={() => playSongAtIndex(index)}
-                      title="播放"
+                      title={t('playlist:player.play')}
                     >
                       <i className="ri-play-fill"></i>
                     </button>
@@ -551,24 +551,24 @@ export default function PlaylistPage({ playlist }: { playlist: Playlist | null }
 
           {/* 控制按钮 */}
           <div className="player-controls">
-            <button className="player-btn" onClick={playPrev} title={t('playlist:player.previous')}>
+            <button className="btn btn-circle btn-ghost player-btn" id="prevBtn" onClick={playPrev} title={t('playlist:player.previous')}>
               <i className="ri-skip-back-fill"></i>
             </button>
             <button
-              className="player-btn player-btn-main"
+              className="btn btn-circle player-btn player-btn-main"
               onClick={togglePlayPause}
               title={isPlaying ? t('playlist:player.pause') : t('playlist:player.play')}
             >
               <i className={isPlaying ? 'ri-pause-fill' : 'ri-play-fill'}></i>
             </button>
-            <button className="player-btn" onClick={playNext} title={t('playlist:player.next')}>
+            <button className="btn btn-circle btn-ghost player-btn" onClick={playNext} title={t('playlist:player.next')}>
               <i className="ri-skip-forward-fill"></i>
             </button>
           </div>
 
           {/* 音量控制 */}
           <div className="player-volume">
-            <button className="player-btn" onClick={toggleMute} title={volume > 0 ? t('playlist:player.mute') : t('playlist:player.unmute')}>
+            <button className="btn btn-circle btn-ghost player-btn" onClick={toggleMute} title={volume > 0 ? t('playlist:player.mute') : t('playlist:player.unmute')}>
               <i className={getVolumeIcon()}></i>
             </button>
             <div className="volume-slider-container">
@@ -587,7 +587,7 @@ export default function PlaylistPage({ playlist }: { playlist: Playlist | null }
           </div>
 
           {/* 关闭按钮 */}
-          <button className="player-btn player-close" onClick={closePlayer} title="关闭播放器">
+          <button className="btn btn-circle btn-ghost player-btn player-close" onClick={closePlayer} title={t('playlist:player.close')}>
             <i className="ri-close-line"></i>
           </button>
         </div>
@@ -607,8 +607,8 @@ export default function PlaylistPage({ playlist }: { playlist: Playlist | null }
             console.log('播放器已关闭')
             return
           }
-          console.error('音频加载失败')
-          alert('播放失败，可能是网络问题或该歌曲暂不支持播放')
+          console.error(t('playlist:player.loadFailed'))
+          alert(t('playlist:player.networkError'))
         }}
         preload="metadata"
       />

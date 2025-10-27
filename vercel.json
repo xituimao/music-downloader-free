@@ -1,12 +1,5 @@
 {
   "version": 2,
-  "name": "music-download",
-  "builds": [
-    {
-      "src": "package.json",
-      "use": "@vercel/next"
-    }
-  ],
   "functions": {
     "pages/api/**/*.ts": {
       "maxDuration": 30
@@ -90,7 +83,7 @@
   "trailingSlash": false,
   "cleanUrls": true,
   "public": true,
-  "regions": ["hkg1", "sfo1"],
+  "regions": ["sfo1"],
   "github": {
     "silent": true
   },

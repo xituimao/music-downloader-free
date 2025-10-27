@@ -3,6 +3,15 @@
   "subtitle": "Search, preview and batch download playlists",
   "hotPlaylist": {
     "title": "Hot Playlists"
+  },
+  "order": {
+    "hot": "Hot",
+    "new": "Latest"
+  },
+  "noData": "No data available",
+  "playCount": {
+    "hundredMillion": "B",
+    "tenThousand": "W"
   }
 }
 
