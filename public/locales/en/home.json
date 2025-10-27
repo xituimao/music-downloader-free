@@ -12,10 +12,15 @@
   "playCount": {
     "hundredMillion": "B",
     "tenThousand": "W",
-    "label": "plays"
+    "label": "plays",
+    "fullLabel": "Play Count"
   },
   "updateTime": {
-    "label": "Updated"
+    "label": "Updated",
+    "fullLabel": "Update Time",
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "daysAgo": "{{days}} days ago"
   }
 }
 

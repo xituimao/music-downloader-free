@@ -12,10 +12,15 @@
   "playCount": {
     "hundredMillion": "亿",
     "tenThousand": "万",
-    "label": "播放"
+    "label": "播放",
+    "fullLabel": "播放量"
   },
   "updateTime": {
-    "label": "更新于"
+    "label": "更新于",
+    "fullLabel": "更新时间",
+    "today": "今天",
+    "yesterday": "昨天",
+    "daysAgo": "{{days}}天前"
   }
 }
 

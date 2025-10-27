@@ -1,4 +1,5 @@
 import Document, { Html, Head, Main, NextScript } from 'next/document'
+import Script from 'next/script'
 
 class MyDocument extends Document {
   render() {
@@ -13,26 +14,17 @@ class MyDocument extends Document {
 
           {/* Remixicon 本地引用 */}
           <link rel="stylesheet" href="/remixicon.css" />
-          
-          {/* Google Tag Manager */}
-          <script
-            async
-            src="https://www.googletagmanager.com/gtag/js?id=G-EDV8JHXRPX"
-          />
-          <script
-            dangerouslySetInnerHTML={{
-              __html: `
-                window.dataLayer = window.dataLayer || [];
-                function gtag(){dataLayer.push(arguments);}
-                gtag('js', new Date());
-                gtag('config', 'G-EDV8JHXRPX');
-              `
-            }}
-          />
         </Head>
         <body>
           <Main />
           <NextScript />
+          <Script src="https://www.googletagmanager.com/gtag/js?id=G-EDV8JHXRPX" strategy="afterInteractive" />
+          <Script id="google-analytics" strategy="afterInteractive">
+            {`window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-EDV8JHXRPX');`}
+          </Script>
         </body>
       </Html>
     )

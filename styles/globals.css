@@ -415,8 +415,7 @@ main {
 
 .hot-playlist-card-stats {
   display: flex;
-  flex-direction: column;
-  gap: 4px;
+  gap: 10px;
   margin-top: 8px;
 }
 

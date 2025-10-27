@@ -68,6 +68,11 @@ export default function Home({ initialPlaylists, initialOrder }: HomeProps) {
   }
 
   const formatPlayCount = (count: number) => {
+    const formattedCount = formatPlayCountNumber(count)
+    return `${formattedCount} ${t('home:playCount.label')}`
+  }
+
+  const formatPlayCountNumber = (count: number) => {
     let formattedCount = ''
     if (count >= 100000000) {
       formattedCount = (count / 100000000).toFixed(1) + t('home:playCount.hundredMillion')
@@ -76,23 +81,39 @@ export default function Home({ initialPlaylists, initialOrder }: HomeProps) {
     } else {
       formattedCount = count.toString()
     }
-    return `${formattedCount} ${t('home:playCount.label')}`
+    return `${formattedCount}`
   }
 
+  /**
+   * 根据时间戳格式化显示时间
+   * 1. 当天显示：小时:分钟
+   * 2. 当年显示：日期/月份
+   * 3. 跨年显示：月份/年份
+   * @param timestamp 时间戳
+   * @returns 格式化后的时间字符串
+   */
   const formatUpdateTime = (timestamp: number) => {
     const date = new Date(timestamp)
     const now = new Date()
-    const diffTime = now.getTime() - date.getTime()
-    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24))
-
-    if (diffDays === 0) {
-      return '今天'
-    } else if (diffDays === 1) {
-      return '昨天'
-    } else if (diffDays < 7) {
-      return `${diffDays}天前`
+    
+    // 判断是否是同一天
+    const isSameDay = 
+      date.getDate() === now.getDate() && 
+      date.getMonth() === now.getMonth() && 
+      date.getFullYear() === now.getFullYear()
+    
+    // 判断是否是同一年
+    const isSameYear = date.getFullYear() === now.getFullYear()
+    
+    if (isSameDay) {
+      // 当天显示：小时:分钟
+      return date.toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit', hour12: false })
+    } else if (isSameYear) {
+      // 当年显示：日期/月份
+      return date.toLocaleDateString(locale, { day: 'numeric', month: 'numeric' })
     } else {
-      return date.toLocaleDateString()
+      // 跨年显示：月份/年份
+      return date.toLocaleDateString(locale, { month: 'numeric', year: 'numeric' })
     }
   }
 
@@ -228,13 +249,14 @@ export default function Home({ initialPlaylists, initialOrder }: HomeProps) {
                     {playlist.name}
                   </div>
                   <div className="hot-playlist-card-stats">
-                    <span className="play-count" title="播放量">
+                    <span className="play-count" title={`${t('home:playCount.fullLabel')}: ${formatPlayCount(playlist.playCount)}`}>
                       <i className="ri-play-circle-fill"></i>
-                      {formatPlayCount(playlist.playCount)}
+                      {formatPlayCountNumber(playlist.playCount)
+                      }
                     </span>
-                    <span className="update-time" title="更新时间">
+                    <span className="update-time" title={`${t('home:updateTime.fullLabel')}: ${new Date(playlist.updateTime).toLocaleString(locale, { year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' })}`}>
                       <i className="ri-time-line"></i>
-                      {t('home:updateTime.label')} {formatUpdateTime(playlist.updateTime)}
+                      {formatUpdateTime(playlist.updateTime)}
                     </span>
                   </div>
                 </div>

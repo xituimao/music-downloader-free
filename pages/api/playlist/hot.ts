@@ -25,7 +25,7 @@ function logger(message: string, data?: any) {
   
   // 尝试写入日志文件（如果有写入权限）
   try {
-    const logDir = path.join(process.cwd(), 'logs')
+    const logDir = path.join(process.cwd(), './.logs')
     if (!fs.existsSync(logDir)) {
       fs.mkdirSync(logDir, { recursive: true })
     }
