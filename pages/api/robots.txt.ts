@@ -5,6 +5,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   const host = req.headers.host || 'localhost:3000'
   const base = `${proto}://${host}`
   res.setHeader('Content-Type', 'text/plain; charset=utf-8')
+  res.setHeader('Cache-Control', 'public, max-age=86400, s-maxage=86400') // 缓存一天
   res.status(200).send([
     'User-agent: *',
     'Allow: /',

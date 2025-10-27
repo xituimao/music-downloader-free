@@ -9,6 +9,31 @@ const nextConfig = {
       { protocol: 'http', hostname: '**' },
       { protocol: 'https', hostname: '**' }
     ]
+  },
+  // 添加全局Header规则，优化缓存控制
+  async headers() {
+    return [
+      // 为静态页面添加缓存控制
+      {
+        source: '/((?!api).*)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=600, s-maxage=1800'
+          }
+        ]
+      },
+      // 为字体和图片添加更长的缓存时间
+      {
+        source: '/(.*)\\.(woff|woff2|ttf|eot)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable'
+          }
+        ]
+      }
+    ]
   }
 }
 

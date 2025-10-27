@@ -83,7 +83,7 @@
   "trailingSlash": false,
   "cleanUrls": true,
   "public": true,
-  "regions": ["sfo1"],
+  "regions": ["sin1"],
   "github": {
     "silent": true
   },

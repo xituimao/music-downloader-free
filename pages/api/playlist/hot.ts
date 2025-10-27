@@ -134,6 +134,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     // 返回排序后的结果
     // 添加排序相关信息
+    // 热门歌单数据适合缓存，使用stale-while-revalidate模式
+    res.setHeader('Cache-Control', 'public, max-age=300, s-maxage=1800, stale-while-revalidate=7200')
     res.status(200).json({
       ...(result.body as any),
       playlists,
