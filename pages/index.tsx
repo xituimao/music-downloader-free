@@ -4,6 +4,7 @@
  * 2. 支持按"热门/最新"排序切换
  * 3. Google风格的搜索界面
  */
+// Analytics now integrated in _app.tsx
 import Head from 'next/head'
 import { useState } from 'react'
 import { useRouter } from 'next/router'

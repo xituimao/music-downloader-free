@@ -2,6 +2,7 @@ import type { AppProps } from 'next/app'
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { appWithTranslation } from 'next-i18next'
+import { Analytics } from '@vercel/analytics/react'
 import '@/styles/globals.css'
 
 declare global {
@@ -23,7 +24,12 @@ function MyApp({ Component, pageProps }: AppProps) {
     }
   }, [router])
 
-  return <Component {...pageProps} />
+  return (
+    <>
+      <Component {...pageProps} />
+      <Analytics />
+    </>
+  )
 }
 
 export default appWithTranslation(MyApp)
