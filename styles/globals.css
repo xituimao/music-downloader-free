@@ -496,9 +496,8 @@ body.home-active main {
 
 .navbar-container {
   height: 100%;
-  max-width: 1400px;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 0 var(--spacing-lg);
   display: flex;
   align-items: center;
   justify-content: space-between;
