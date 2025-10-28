@@ -7,6 +7,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { seoPlaylist } from '@/lib/seo'
 import LanguageSwitcher from '@/components/LanguageSwitcher'
 import HreflangLinks from '@/components/HreflangLinks'
+import Footer from '@/components/Footer'
 
 type Song = {
   id: number
@@ -659,28 +660,7 @@ export default function PlaylistPage({ playlist }: { playlist: Playlist | null }
       <script src="/jszip.min.js"></script>
 
       {/* 页脚 */}
-      <footer className="footer">
-        <div style={{ 
-          display: 'flex', 
-          gap: 16, 
-          justifyContent: 'center',
-          flexWrap: 'wrap',
-          marginBottom: 8
-        }}>
-          <a href="/docs/guide" style={{ color: 'inherit', textDecoration: 'none' }}>
-            {t('common:nav.guide')}
-          </a>
-          <span style={{ color: '#ddd' }}>|</span>
-          <a href="/licenses" style={{ color: 'inherit', textDecoration: 'none' }}>
-            {t('common:nav.licenses')}
-          </a>
-          <span style={{ color: '#ddd' }}>|</span>
-          <a href="/api/sitemap.xml" style={{ color: 'inherit', textDecoration: 'none' }}>
-            {t('common:nav.sitemap')}
-          </a>
-        </div>
-        <p>{t('common:footer.text')}</p>
-      </footer>
+      <Footer />
     </>
   )
 }
