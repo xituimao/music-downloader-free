@@ -11,8 +11,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const result = await song_url_v1({ id: String(ids), level: String(level) as any })
     
     // 记录返回的歌曲数量信息
-    const returnedIds = result.body?.data?.map((item: any) => item.id).join(',') || ''
-    const returnCount = result.body?.data?.length || 0
+    const data = result.body?.data
+    let returnedIds = ''
+    let returnCount = 0
+
+    if (Array.isArray(data)) {
+      returnedIds = data.map((item: any) => item.id).join(',')
+      returnCount = data.length
+    }
     console.log(`返回数量: ${returnCount}, 返回的ID: ${returnedIds}`)
 
     // 歌曲URL需要实时性，但可以短时间缓存，并使用stale-while-revalidate策略

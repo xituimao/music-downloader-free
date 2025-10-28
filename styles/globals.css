@@ -128,7 +128,6 @@ body {
 
 .btn:hover:not(:disabled) {
   background: var(--spotify-green-hover);
-  transform: scale(1.04);
 }
 
 .btn:active:not(:disabled) {

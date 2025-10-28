@@ -144,6 +144,13 @@ export default function PlaylistPage({ playlist }: { playlist: Playlist | null }
       return
     }
 
+    // ⭐ 关键修改：前置jszip检测，避免浪费服务端算力
+    const JSZip = (window as any).JSZip
+    if (!JSZip) {
+      alert(t('common:error.jszipNotLoaded'))
+      return
+    }
+
     const selectedSongList = (playlist.tracks || []).filter(s => selectedSongs.has(s.id))
     const vipSongs = selectedSongList.filter(isVipSong)
 
@@ -160,9 +167,12 @@ export default function PlaylistPage({ playlist }: { playlist: Playlist | null }
     try {
       const songIds = Array.from(selectedSongs)
       
-      // 解决手机端批量请求限制问题 - 分批请求每个歌曲ID
+      // ⭐ 关键修改：批量请求优化
+      // 原来 batchSize = 1（一次只获取1首），现在改为50（一次获取50首）
+      // 这样可以大幅减少请求次数和服务端压力
+      // NeteaseCloudMusicApi 的 song_url_v1 完全支持批量获取
       const songUrls: any[] = []
-      const batchSize = 1 // 手机端单个请求处理
+      const batchSize = 50 // 每批请求50首歌曲
       
       for (let i = 0; i < songIds.length; i += batchSize) {
         const batchIds = songIds.slice(i, i + batchSize)
@@ -172,7 +182,7 @@ export default function PlaylistPage({ playlist }: { playlist: Playlist | null }
             songUrls.push(...batchData.data)
           }
         } catch (err) {
-          console.error(`获取歌曲URL批次 ${i / batchSize + 1} 失败:`, err)
+          console.error(`获取歌曲URL批次 ${Math.floor(i / batchSize) + 1} 失败:`, err)
         }
       }
       
@@ -194,13 +204,7 @@ export default function PlaylistPage({ playlist }: { playlist: Playlist | null }
         return
       }
 
-      const JSZip = (window as any).JSZip
-      if (!JSZip) {
-        alert(t('common:error.jszipNotLoaded'))
-        setIsDownloading(false)
-        return
-      }
-
+      // ⭐ jszip检测已经前置到函数开始，这里无需再检查
       const zip = new JSZip()
       let successCount = 0
       let failCount = 0
