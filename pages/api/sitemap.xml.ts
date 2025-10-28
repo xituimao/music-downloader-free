@@ -1,13 +1,13 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
+import { SITE_URL, SUPPORTED_LOCALES } from '../../lib/constants'
 
 /**
  * 动态生成多语言 sitemap
  * 为每个页面生成中英文两个版本，并添加 hreflang 链接
  */
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
-  const proto = (req.headers['x-forwarded-proto'] as string) || 'http'
-  const host = req.headers.host || 'localhost:3000'
-  const base = `${proto}://${host}`
+  // 使用固定的站点URL，不再依赖请求头
+  const base = SITE_URL
   
   // 支持多语言的页面路径（不含语言前缀）
   const pages = [
@@ -17,7 +17,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     { path: '/licenses', priority: '0.6', changefreq: 'monthly' }
   ]
   
-  const locales = ['zh', 'en']
+  const locales = SUPPORTED_LOCALES
   
   // 生成 URL 条目，每个页面包含所有语言版本的 alternate 链接
   const urlEntries = pages.map(page => {

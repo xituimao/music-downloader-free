@@ -2,6 +2,7 @@
  * Hreflang 链接组件
  * 用于 SEO，告诉搜索引擎不同语言版本页面的关系
  */
+import { SITE_URL, SUPPORTED_LOCALES, DEFAULT_LOCALE } from '../lib/constants'
 
 interface HreflangLinksProps {
   /** 基础域名，如 https://example.com */
@@ -10,8 +11,8 @@ interface HreflangLinksProps {
   path?: string
 }
 
-export default function HreflangLinks({ baseUrl = '', path = '/' }: HreflangLinksProps) {
-  const locales = ['zh', 'en']
+export default function HreflangLinks({ baseUrl = SITE_URL, path = '/' }: HreflangLinksProps) {
+  const locales = SUPPORTED_LOCALES
   
   // 确保路径以 / 开头
   const normalizedPath = path.startsWith('/') ? path : `/${path}`
@@ -30,7 +31,7 @@ export default function HreflangLinks({ baseUrl = '', path = '/' }: HreflangLink
       <link
         rel="alternate"
         hrefLang="x-default"
-        href={`${baseUrl}/zh${normalizedPath}`}
+        href={`${baseUrl}/${DEFAULT_LOCALE}${normalizedPath}`}
       />
     </>
   )

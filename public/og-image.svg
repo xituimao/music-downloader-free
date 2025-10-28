@@ -1,0 +1,19 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="630" fill="url(#paint0_linear)" />
+  <path d="M150 230H1050V290H150V230Z" fill="white" fill-opacity="0.1" />
+  <text fill="white" font-family="Arial" font-size="80" font-weight="bold" letter-spacing="0em">
+    <tspan x="150" y="200">Music Downloader</tspan>
+  </text>
+  <text fill="white" fill-opacity="0.8" font-family="Arial" font-size="40" letter-spacing="0em">
+    <tspan x="150" y="330">一键音乐下载 | 歌单批量下载工具</tspan>
+  </text>
+  <text fill="white" font-family="Arial" font-size="30" letter-spacing="0em">
+    <tspan x="880" y="580">musicdownloader.cc</tspan>
+  </text>
+  <defs>
+    <linearGradient id="paint0_linear" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#1DB954" />
+      <stop offset="1" stop-color="#191414" />
+    </linearGradient>
+  </defs>
+</svg>

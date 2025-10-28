@@ -38,6 +38,10 @@ npm run dev
 ```
 支持热更新（Next.js Fast Refresh），启动成功后访问 `http://localhost:3000`。
 
+## 生产环境
+
+生产环境访问地址：[https://musicdownloader.cc](https://musicdownloader.cc)
+
 若遇到端口占用，可先清理 3000 端口：
 ```bash
 lsof -ti:3000 | xargs kill -9 2>/dev/null || true

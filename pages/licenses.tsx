@@ -497,6 +497,10 @@ export default function Licenses() {
           <Link href="/licenses" style={{ color: 'inherit', textDecoration: 'none' }}>
             {t('common:nav.licenses')}
           </Link>
+          <span style={{ color: '#ddd' }}>|</span>
+          <Link href="/api/sitemap.xml" style={{ color: 'inherit', textDecoration: 'none' }}>
+            {t('common:nav.sitemap')}
+          </Link>
         </div>
         <p>{t('common:footer.text')}</p>
       </footer>

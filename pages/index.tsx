@@ -283,6 +283,10 @@ export default function Home({ initialPlaylists, initialOrder }: HomeProps) {
           <a href="/licenses" style={{ color: 'inherit', textDecoration: 'none' }}>
             {t('common:nav.licenses')}
           </a>
+          <span style={{ color: '#ddd' }}>|</span>
+          <a href="/api/sitemap.xml" style={{ color: 'inherit', textDecoration: 'none' }}>
+            {t('common:nav.sitemap')}
+          </a>
         </div>
         <p>{t('common:footer.text')}</p>
       </footer>

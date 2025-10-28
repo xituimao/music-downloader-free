@@ -5,6 +5,12 @@
       "maxDuration": 10
     }
   },
+  "crons": [
+    {
+      "path": "/api/sitemap.xml",
+      "schedule": "0 0 * * *"
+    }
+  ],
   "headers": [
     {
       "source": "/api/(.*)",
