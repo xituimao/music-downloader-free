@@ -12,7 +12,7 @@ export const API_BASE_URL = SITE_URL
 
 // 社交媒体配置
 export const SOCIAL_LINKS = {
-  github: 'https://github.com/yourusername/music-download'
+  github: 'https://github.com/xituimao/music-downloader-free'
 }
 
 // SEO相关
