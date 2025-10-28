@@ -158,8 +158,23 @@ export default function PlaylistPage({ playlist }: { playlist: Playlist | null }
 
     try {
       const songIds = Array.from(selectedSongs)
-      const urlData = await fetch(`/api/song/url?ids=${songIds.join(',')}&level=exhigh`).then(r => r.json())
-      const songUrls = urlData.data || []
+      
+      // 解决手机端批量请求限制问题 - 分批请求每个歌曲ID
+      const songUrls: any[] = []
+      const batchSize = 1 // 手机端单个请求处理
+      
+      for (let i = 0; i < songIds.length; i += batchSize) {
+        const batchIds = songIds.slice(i, i + batchSize)
+        try {
+          const batchData = await fetch(`/api/song/url?ids=${batchIds.join(',')}&level=exhigh`).then(r => r.json())
+          if (batchData.data && batchData.data.length > 0) {
+            songUrls.push(...batchData.data)
+          }
+        } catch (err) {
+          console.error(`获取歌曲URL批次 ${i / batchSize + 1} 失败:`, err)
+        }
+      }
+      
       const urlMap = new Map(songUrls.filter((item: any) => item.url).map((item: any) => [item.id, item.url]))
 
       const songs = selectedSongList
@@ -193,6 +208,9 @@ export default function PlaylistPage({ playlist }: { playlist: Playlist | null }
         const song = songs[i]
         setDownloadProgress({ current: i + 1, total: songs.length })
         setDownloadingId(song.id) // 标记当前正在下载的歌曲
+        
+        // 增加日志便于调试
+        console.log(`开始下载第 ${i+1}/${songs.length} 首: ${song.name} (${song.id})`)
 
         try {
           const response = await fetch(song.url)
@@ -231,6 +249,9 @@ export default function PlaylistPage({ playlist }: { playlist: Playlist | null }
         window.URL.revokeObjectURL(url)
       }, 100)
 
+      // 将打包完成的详细信息增加到提示中
+      const detailMsg = `选中: ${selectedSongs.size} 首, 得到URL: ${songs.length} 首, 打包成功: ${successCount} 首`
+      console.log(detailMsg) // 同时输出到控制台便于调试
       alert(t('playlist:alert.packagingComplete', { success: successCount, fail: failCount }))
       
       // 全部完成后重置状态
