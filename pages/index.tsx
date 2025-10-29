@@ -15,7 +15,7 @@ import LanguageSwitcher from '@/components/LanguageSwitcher'
 import HreflangLinks from '@/components/HreflangLinks'
 import Footer from '@/components/Footer'
 import type { GetServerSideProps } from 'next'
-import { top_playlist } from 'NeteaseCloudMusicApi'
+import nextI18NextConfig from '../next-i18next.config'
 
 interface HomeProps {
   initialPlaylists: any[]
@@ -30,29 +30,38 @@ export default function Home({ initialPlaylists, initialOrder }: HomeProps) {
   const [homeSearchInput, setHomeSearchInput] = useState('')
   const [hotPlaylists, setHotPlaylists] = useState<any[]>(initialPlaylists)
   const [order, setOrder] = useState<'hot' | 'new'>(initialOrder)
-  const [loading, setLoading] = useState(false)
+
+  /**
+   * 客户端排序逻辑
+   * 按照指定方式对歌单进行排序
+   */
+  const sortPlaylists = (playlists: any[], sortOrder: 'hot' | 'new') => {
+    const sorted = [...playlists]
+    if (sortOrder === 'new') {
+      // 按更新时间降序（最新的在前）
+      return sorted.sort((a, b) => {
+        const aTime = typeof a.updateTime === 'number' ? a.updateTime : new Date(a.updateTime || 0).getTime()
+        const bTime = typeof b.updateTime === 'number' ? b.updateTime : new Date(b.updateTime || 0).getTime()
+        return bTime - aTime
+      })
+    } else {
+      // 按播放量降序（热门的在前）
+      return sorted.sort((a, b) => {
+        const aCount = typeof a.playCount === 'number' ? a.playCount : 0
+        const bCount = typeof b.playCount === 'number' ? b.playCount : 0
+        return bCount - aCount
+      })
+    }
+  }
 
   /**
    * 切换排序方式
-   * 客户端异步加载新数据，提升交互体验
+   * 客户端直接排序，无需重新请求API（节省服务端算力）
    */
-  const handleOrderChange = async (newOrder: 'hot' | 'new') => {
+  const handleOrderChange = (newOrder: 'hot' | 'new') => {
     if (newOrder === order) return
-    
     setOrder(newOrder)
-    setLoading(true)
-    
-    try {
-      const res = await fetch(`/api/playlist/hot?limit=20&order=${newOrder}`)
-      const data = await res.json()
-      if (data.code === 200) {
-        setHotPlaylists(data.playlists || [])
-      }
-    } catch (err) {
-      console.error('加载歌单失败:', err)
-    } finally {
-      setLoading(false)
-    }
+    setHotPlaylists(sortPlaylists(hotPlaylists, newOrder))
   }
 
   const handleHomeSearch = () => {
@@ -211,7 +220,6 @@ export default function Home({ initialPlaylists, initialOrder }: HomeProps) {
               <button 
                 className={`order-tab ${order === 'hot' ? 'active' : ''}`}
                 onClick={() => handleOrderChange('hot')}
-                disabled={loading}
               >
                 <i className="ri-fire-fill"></i>
                 <span>{t('home:order.hot')}</span>
@@ -219,7 +227,6 @@ export default function Home({ initialPlaylists, initialOrder }: HomeProps) {
               <button 
                 className={`order-tab ${order === 'new' ? 'active' : ''}`}
                 onClick={() => handleOrderChange('new')}
-                disabled={loading}
               >
                 <i className="ri-time-fill"></i>
                 <span>{t('home:order.new')}</span>
@@ -227,11 +234,7 @@ export default function Home({ initialPlaylists, initialOrder }: HomeProps) {
             </div>
           </div>
           <div id="hotPlaylistList" className="hot-playlist-grid">
-            {loading ? (
-              <p style={{ textAlign: 'center', color: '#999', gridColumn: '1/-1' }}>
-                {t('common:loading')}
-              </p>
-            ) : hotPlaylists.length === 0 ? (
+            {hotPlaylists.length === 0 ? (
               <p style={{ textAlign: 'center', color: '#999', gridColumn: '1/-1' }}>
                 {t('home:noData')}
               </p>
@@ -277,35 +280,31 @@ export default function Home({ initialPlaylists, initialOrder }: HomeProps) {
 
 /**
  * 服务端渲染（SSR）
- * 1. 获取初始热门歌单数据，默认按热门排序
+ * 1. 获取初始热门歌单原始数据
  * 2. 提升首屏渲染速度和SEO效果
- * 3. 修复：网易云API的order='new'不工作，在服务端应用排序逻辑
+ * 3. 排序逻辑由客户端处理，降低服务端负载
+ * 4. 使用匿名访问模式（经验证比游客登录更稳定）
  */
-export const getServerSideProps: GetServerSideProps = async ({ locale }) => {
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const { locale } = ctx as any
   try {
-    // 修复：网易云API的order='new'参数不工作，始终使用'hot'获取数据
-    // 然后在服务端应用热门排序逻辑（按播放量排序）
+    // 使用ES模块导入（匿名访问模式）
+    const { top_playlist } = require('NeteaseCloudMusicApi')
+    
     const result = await top_playlist({
       cat: '全部',
       limit: 20,
       offset: 0,
-      order: 'hot' as any // 固定使用hot排序获取数据
+      order: 'hot'
+      // 不传cookie，使用匿名访问
     })
 
-    let playlists: any[] = (result.body as any)?.playlists || []
-
-    // 服务端应用热门排序：按播放量降序排列
-    if (playlists.length > 0) {
-      playlists = playlists.sort((a: any, b: any) => {
-        const aCount = typeof a.playCount === 'number' ? a.playCount : 0
-        const bCount = typeof b.playCount === 'number' ? b.playCount : 0
-        return bCount - aCount // 降序排列（播放量高的在前）
-      })
-    }
-
+    let playlists: any[] = (result?.body as any)?.playlists || []
+    
+    // 客户端会处理排序，这里返回原始数据即可
     return {
       props: {
-        ...(await serverSideTranslations(locale || 'zh', ['common', 'home', 'seo'])),
+        ...(await serverSideTranslations(locale || 'zh', ['common', 'home', 'seo'], nextI18NextConfig as any)),
         initialPlaylists: playlists,
         initialOrder: 'hot' as const
       }
@@ -315,7 +314,7 @@ export const getServerSideProps: GetServerSideProps = async ({ locale }) => {
     // 出错时返回空数据，前端会显示"暂无数据"
     return {
       props: {
-        ...(await serverSideTranslations(locale || 'zh', ['common', 'home', 'seo'])),
+        ...(await serverSideTranslations(locale || 'zh', ['common', 'home', 'seo'], nextI18NextConfig as any)),
         initialPlaylists: [],
         initialOrder: 'hot' as const
       }

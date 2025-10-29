@@ -10,6 +10,14 @@ const nextConfig = {
       { protocol: 'https', hostname: '**' }
     ]
   },
+  outputFileTracingIncludes: {
+    '/*': [
+      './node_modules/NeteaseCloudMusicApi/module/**/*',
+      './node_modules/NeteaseCloudMusicApi/util/**/*',
+      './next-i18next.config.js',
+      './public/locales/**/*'
+    ]
+  },
   // 添加全局Header规则，优化缓存控制
   async headers() {
     return [
