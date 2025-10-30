@@ -12,8 +12,8 @@ const nextConfig = {
   },
   outputFileTracingIncludes: {
     '/*': [
-      './node_modules/NeteaseCloudMusicApi/module/**/*',
-      './node_modules/NeteaseCloudMusicApi/util/**/*',
+      './node_modules/NeteaseCloudMusicApi/**/*',
+      './node_modules/xml2js/**/*',
       './next-i18next.config.js',
       './public/locales/**/*'
     ]
