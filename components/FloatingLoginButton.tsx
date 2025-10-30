@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import QRLoginModal from './auth/QRLoginModal'
+import { apiPost, getErrorMessage } from '@/lib/api-client'
 
 /**
  * 悬浮登录按钮组件
@@ -87,10 +88,7 @@ export default function FloatingLoginButton() {
   // 退出登录
   const handleLogout = async () => {
     try {
-      await fetch('/api/auth/logout', { 
-        method: 'POST',
-        credentials: 'include'
-      })
+      await apiPost('/api/auth/logout', undefined, { name: 'Logout' })
       
       // 清除localStorage中的用户信息
       localStorage.removeItem('NETEASE_USER')
@@ -98,8 +96,8 @@ export default function FloatingLoginButton() {
       
       setUser(null)
       setShowMenu(false)
-    } catch (e) {
-      console.error('❌ 退出登录失败:', e)
+    } catch (error) {
+      console.error('退出登录失败:', getErrorMessage(error))
     }
   }
 

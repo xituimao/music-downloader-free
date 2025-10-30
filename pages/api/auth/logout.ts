@@ -1,11 +1,22 @@
-import type { NextApiRequest, NextApiResponse } from 'next'
 import { serialize } from 'cookie'
+import { apiHandler } from '@/lib/api-handler'
 
 /**
  * 登出，清除cookie
  */
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default apiHandler({ name: 'Auth-Logout' }, async (req, res) => {
   const cookie = req.cookies.NETEASE_MUSIC_COOKIE
+  
+  // 定义清除cookie的函数
+  const clearCookie = () => {
+    res.setHeader('Set-Cookie', serialize('NETEASE_MUSIC_COOKIE', '', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 0,
+      path: '/'
+    }))
+  }
   
   try {
     // 如果有cookie，调用网易云登出接口
@@ -18,27 +29,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       await logout({ cookie }, request)
     }
     
-    // 清除httpOnly cookie
-    res.setHeader('Set-Cookie', serialize('NETEASE_MUSIC_COOKIE', '', {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      maxAge: 0,
-      path: '/'
-    }))
-    
+    clearCookie()
     res.status(200).json({ code: 200, message: '登出成功' })
+    return {} as any
   } catch (e: any) {
     // 即使登出失败也清除cookie
-    res.setHeader('Set-Cookie', serialize('NETEASE_MUSIC_COOKIE', '', {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      maxAge: 0,
-      path: '/'
-    }))
-    
-    res.status(500).json({ code: 500, message: e?.message || '登出失败' })
+    clearCookie()
+    throw e
   }
-}
+})
 

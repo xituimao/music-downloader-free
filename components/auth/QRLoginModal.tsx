@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import { apiGet, getErrorMessage } from '@/lib/api-client'
 
 interface QRLoginModalProps {
   visible: boolean
@@ -26,25 +27,29 @@ export default function QRLoginModal({ visible, onSuccess, onCancel }: QRLoginMo
     
     try {
       // 1. 获取key
-      const keyRes = await fetch('/api/auth/qr/key')
-      const keyData = await keyRes.json()
-      const key = keyData.data?.unikey
+      const keyData = await apiGet('/api/auth/qr/key', { name: 'QR-Key' })
       
-      if (!key) throw new Error('获取key失败')
+      const key = keyData.data?.unikey
+      if (!key) {
+        throw new Error('获取key失败：响应格式异常')
+      }
       setQrKey(key)
       
       // 2. 生成二维码
-      const qrRes = await fetch(`/api/auth/qr/create?key=${key}&qrimg=true`)
-      const qrData = await qrRes.json()
+      const qrData = await apiGet(`/api/auth/qr/create?key=${key}&qrimg=true`, { 
+        name: 'QR-Create' 
+      })
       
-      if (!qrData.data?.qrimg) throw new Error('生成二维码失败')
+      if (!qrData.data?.qrimg) {
+        throw new Error('生成二维码失败：响应格式异常')
+      }
       setQrImg(qrData.data.qrimg)
       setState('scanning')
       
       // 3. 开始轮询状态
       startPolling(key)
-    } catch (e: any) {
-      setErrorMsg(e.message || '初始化失败')
+    } catch (error: any) {
+      setErrorMsg(getErrorMessage(error, '初始化失败'))
       setState('done')
     }
   }
@@ -56,8 +61,11 @@ export default function QRLoginModal({ visible, onSuccess, onCancel }: QRLoginMo
     
     const poll = async () => {
       try {
-        const res = await fetch(`/api/auth/qr/check?key=${key}`)
-        const data = await res.json()
+        const data = await apiGet(`/api/auth/qr/check?key=${key}`, { 
+          name: 'QR-Check',
+          logRequest: false,
+          logResponse: false
+        })
         
         pollCount++
         
@@ -129,8 +137,8 @@ export default function QRLoginModal({ visible, onSuccess, onCancel }: QRLoginMo
           setErrorMsg('二维码已过期，请刷新')
           setState('done')
         }
-      } catch (e: any) {
-        console.error('轮询失败:', e)
+      } catch (error: any) {
+        console.error('轮询失败:', getErrorMessage(error))
         // 继续轮询，不中断
       }
     }

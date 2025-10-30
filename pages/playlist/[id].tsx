@@ -7,6 +7,7 @@ import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { seoPlaylist } from '@/lib/seo'
 import { optimizeImageUrl, ensureHttps } from '@/lib/url-utils'
+import { apiGet, getErrorMessage } from '@/lib/api-client'
 import LanguageSwitcher from '@/components/LanguageSwitcher'
 import HreflangLinks from '@/components/HreflangLinks'
 import Footer from '@/components/Footer'
@@ -128,15 +129,17 @@ export default function PlaylistPage({ playlist, totalTracks }: { playlist: Play
     
     setIsLoadingMore(true)
     try {
-      const response = await fetch(`/api/playlist/detail?id=${playlist.id}`)
-      const data = await response.json()
+      const data = await apiGet(`/api/playlist/detail?id=${playlist.id}`, {
+        name: 'LoadFullPlaylist',
+        logResponse: false
+      })
       
       if (data.code === 200 && data.playlist?.tracks) {
         setAllTracks(data.playlist.tracks)
         setHasLoadedAll(true)
       }
     } catch (error) {
-      console.error('加载更多歌曲失败:', error)
+      console.error('加载更多歌曲失败:', getErrorMessage(error))
     } finally {
       setIsLoadingMore(false)
     }
@@ -184,8 +187,11 @@ export default function PlaylistPage({ playlist, totalTracks }: { playlist: Play
     // 如果有VIP歌曲，检查登录状态
     if (vipSongs.length > 0) {
       try {
-        const statusRes = await fetch('/api/auth/status')
-        const statusData = await statusRes.json()
+        const statusData = await apiGet('/api/auth/status', { 
+          name: 'CheckAuthStatus',
+          logRequest: false,
+          logResponse: false
+        })
         
         // 未登录，弹出登录提示
         if (statusData.code !== 200 || !statusData.data?.profile) {
@@ -228,12 +234,16 @@ export default function PlaylistPage({ playlist, totalTracks }: { playlist: Play
       for (let i = 0; i < songIds.length; i += batchSize) {
         const batchIds = songIds.slice(i, i + batchSize)
         try {
-          const batchData = await fetch(`/api/song/url?ids=${batchIds.join(',')}&level=exhigh`).then(r => r.json())
+          const batchData = await apiGet(`/api/song/url?ids=${batchIds.join(',')}&level=exhigh`, {
+            name: `GetSongUrl-Batch${Math.floor(i / batchSize) + 1}`,
+            logRequest: false,
+            logResponse: false
+          })
           if (batchData.data && batchData.data.length > 0) {
             songUrls.push(...batchData.data)
           }
-        } catch (err) {
-          console.error(`获取歌曲URL批次 ${Math.floor(i / batchSize) + 1} 失败:`, err)
+        } catch (error) {
+          console.error(`获取歌曲URL批次 ${Math.floor(i / batchSize) + 1} 失败:`, getErrorMessage(error))
         }
       }
       
@@ -369,7 +379,11 @@ export default function PlaylistPage({ playlist, totalTracks }: { playlist: Play
     const song = allTracks[index]
 
     try {
-      const urlData = await fetch(`/api/song/url?ids=${song.id}&level=exhigh`).then(r => r.json())
+      const urlData = await apiGet(`/api/song/url?ids=${song.id}&level=exhigh`, {
+        name: 'GetSongUrl-Play',
+        logRequest: false,
+        logResponse: false
+      })
       const songUrl = urlData.data?.[0]?.url
       if (!songUrl) {
         alert(t('playlist:player.cannotPlay', { name: song.name }))
