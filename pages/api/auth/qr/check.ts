@@ -25,6 +25,26 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     
     const result = await login_qr_check({ key: String(key) }, request)
     
+    // 🔍 详细调试：打印完整API返回结构
+    console.log('🔍 [QR Check] 完整API返回结构:')
+    console.log('  - result.status:', result.status)
+    console.log('  - result.body:', JSON.stringify(result.body, null, 2))
+    console.log('  - result.cookie:', result.cookie)
+    
+    // 在802阶段（授权中）就返回用户信息给前端
+    if (result.body.code === 802) {
+      console.log('🔍 [QR Check] 802阶段 - 返回用户信息')
+      console.log('  - nickname:', result.body.nickname)
+      console.log('  - avatarUrl:', result.body.avatarUrl)
+      
+      // 将用户信息保存到响应中
+      result.body.profile = {
+        nickname: result.body.nickname || '',
+        avatarUrl: result.body.avatarUrl || '',
+        userId: result.body.userId || null,
+      }
+    }
+    
     // 如果登录成功（code=803），提取关键Cookie字段
     if (result.body.code === 803 && result.body.cookie) {
       const fullCookie = result.body.cookie
@@ -54,11 +74,48 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         path: '/'
       }))
       
-      // 附加用户信息到响应体
-      result.body.profile = {
-        nickname: result.body.nickname,
-        avatarUrl: result.body.avatarUrl,
-        userId: result.body.account.id, // 用户ID通常在account对象里
+      // 803阶段：主动获取用户信息
+      console.log('🔍 [QR Check] 803阶段 - 主动获取用户信息')
+      
+      try {
+        // 使用刚获取的Cookie调用用户信息接口
+        // eslint-disable-next-line @typescript-eslint/no-var-requires
+        const login_status = require('NeteaseCloudMusicApi/module/login_status.js')
+        // eslint-disable-next-line @typescript-eslint/no-var-requires
+        const request = require('NeteaseCloudMusicApi/util/request.js')
+        
+        const userInfoResult = await login_status({ cookie: essentialCookie }, request)
+        console.log('🔍 [QR Check] 用户信息接口返回:', JSON.stringify(userInfoResult.body, null, 2))
+        
+        // 兼容两种返回格式：直接结构和嵌套data结构
+        const profileData = userInfoResult.body.data?.profile || userInfoResult.body.profile
+        const accountData = userInfoResult.body.data?.account || userInfoResult.body.account
+        const responseCode = userInfoResult.body.data?.code || userInfoResult.body.code
+        
+        if (responseCode === 200 && profileData) {
+          result.body.profile = {
+            nickname: profileData.nickname || '',
+            avatarUrl: profileData.avatarUrl || '',
+            userId: profileData.userId || accountData?.id || null,
+          }
+          console.log('✅ [QR Check] 成功获取用户信息:', result.body.profile)
+        } else {
+          console.log('⚠️ [QR Check] 用户信息接口返回异常，使用兜底方案')
+          console.log('  - responseCode:', responseCode)
+          console.log('  - profileData:', profileData)
+          result.body.profile = {
+            nickname: '',
+            avatarUrl: '',
+            userId: null,
+          }
+        }
+      } catch (e: any) {
+        console.error('❌ [QR Check] 获取用户信息失败:', e.message)
+        result.body.profile = {
+          nickname: '',
+          avatarUrl: '',
+          userId: null,
+        }
       }
       
       // 从响应体中移除敏感cookie信息
@@ -67,6 +124,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     
     // 禁止缓存
     res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate')
+    
+    // 🔍 最终响应调试
+    console.log('🔍 [QR Check] 最终响应数据:', JSON.stringify(result.body, null, 2))
     res.status(200).json(result.body)
   } catch (e: any) {
     res.status(500).json({ code: 500, message: e?.message || '检查状态失败' })

@@ -20,10 +20,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       cookie: userCookie
     })
     
+    // 添加调试信息
+    const dataLength = Array.isArray(result.body?.data) ? result.body.data.length : 0
+    console.log(`获取歌曲URL: ids=${ids}, level=${level}, 结果数量=${dataLength}`)
+    
+    // 验证返回数据
+    if (!result.body || !result.body.data) {
+      console.error('歌曲URL API返回数据格式错误:', result)
+      return res.status(500).json({ code: 500, message: 'API返回数据格式错误' })
+    }
+    
     // 歌曲URL需要实时性，但可以短时间缓存，并使用stale-while-revalidate策略
     res.setHeader('Cache-Control', 'public, max-age=30, s-maxage=60, stale-while-revalidate=3600')
     res.status(200).json(result.body)
   } catch (e: any) {
+    console.error('获取歌曲URL失败:', e)
     res.status(500).json({ code: 500, message: e?.message || 'song url failed' })
   }
 }

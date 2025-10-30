@@ -2,7 +2,9 @@
   "actions": {
     "selectAll": "Select All",
     "deselectAll": "Cancel",
-    "download": "Download"
+    "download": "Download",
+    "loading": "Loading...",
+    "loadMore": "Load More ({{current}}/{{total}})"
   },
   "fee": {
     "vip": "VIP",

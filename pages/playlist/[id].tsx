@@ -32,7 +32,7 @@ type Playlist = {
   updateTime?: number
 }
 
-export default function PlaylistPage({ playlist }: { playlist: Playlist | null }) {
+export default function PlaylistPage({ playlist, totalTracks }: { playlist: Playlist | null, totalTracks: number }) {
   const { t } = useTranslation(['common', 'playlist', 'seo'])
   const router = useRouter()
   const locale = router.locale || 'zh'
@@ -57,6 +57,11 @@ export default function PlaylistPage({ playlist }: { playlist: Playlist | null }
   const [volume, setVolume] = useState(0.8)
   const [prevVolume, setPrevVolume] = useState(0.8)
   const audioRef = useRef<HTMLAudioElement>(null)
+  
+  // 客户端加载更多歌曲的状态
+  const [allTracks, setAllTracks] = useState<Song[]>(playlist?.tracks || [])
+  const [isLoadingMore, setIsLoadingMore] = useState(false)
+  const [hasLoadedAll, setHasLoadedAll] = useState(false)
 
   if (!playlist) {
     return (
@@ -67,7 +72,7 @@ export default function PlaylistPage({ playlist }: { playlist: Playlist | null }
     )
   }
 
-  const count = playlist.tracks?.length || 0
+  const count = allTracks.length
   const { title, description } = seoPlaylist(playlist.name, count, playlist.description, locale)
 
   useEffect(() => {
@@ -117,8 +122,28 @@ export default function PlaylistPage({ playlist }: { playlist: Playlist | null }
     return feeMap[fee || 0] || ''
   }
 
+  // 加载更多歌曲
+  const loadMoreTracks = async () => {
+    if (isLoadingMore || hasLoadedAll || !playlist) return
+    
+    setIsLoadingMore(true)
+    try {
+      const response = await fetch(`/api/playlist/detail?id=${playlist.id}`)
+      const data = await response.json()
+      
+      if (data.code === 200 && data.playlist?.tracks) {
+        setAllTracks(data.playlist.tracks)
+        setHasLoadedAll(true)
+      }
+    } catch (error) {
+      console.error('加载更多歌曲失败:', error)
+    } finally {
+      setIsLoadingMore(false)
+    }
+  }
+
   const handleSelectAll = () => {
-    const allIds = new Set(playlist.tracks?.map(s => s.id) || [])
+    const allIds = new Set(allTracks.map(s => s.id))
     setSelectedSongs(allIds)
   }
 
@@ -153,7 +178,7 @@ export default function PlaylistPage({ playlist }: { playlist: Playlist | null }
       return
     }
 
-    const selectedSongList = (playlist.tracks || []).filter(s => selectedSongs.has(s.id))
+    const selectedSongList = allTracks.filter(s => selectedSongs.has(s.id))
     const vipSongs = selectedSongList.filter(isVipSong)
 
     // 如果有VIP歌曲，检查登录状态
@@ -212,7 +237,18 @@ export default function PlaylistPage({ playlist }: { playlist: Playlist | null }
         }
       }
       
-      const urlMap = new Map(songUrls.filter((item: any) => item.url).map((item: any) => [item.id, item.url]))
+      // 过滤有效的URL，确保URL不为空且格式正确
+      const validSongUrls = songUrls.filter((item: any) => {
+        return item.url && 
+               item.url !== 'null' && 
+               item.url !== 'undefined' && 
+               (item.url.startsWith('http://') || item.url.startsWith('https://')) &&
+               item.url.length > 10
+      })
+      
+      console.log(`获取到 ${songUrls.length} 个URL，其中 ${validSongUrls.length} 个有效`)
+      
+      const urlMap = new Map(validSongUrls.map((item: any) => [item.id, item.url]))
 
       const songs = selectedSongList
         .filter(s => urlMap.has(s.id))
@@ -244,16 +280,41 @@ export default function PlaylistPage({ playlist }: { playlist: Playlist | null }
         console.log(`开始下载第 ${i+1}/${songs.length} 首: ${song.name} (${song.id})`)
 
         try {
-          const response = await fetch(song.url)
-          if (!response.ok) throw new Error(`HTTP ${response.status}`)
+          // 验证URL是否有效
+          if (!song.url || song.url === 'null' || song.url === 'undefined') {
+            throw new Error('歌曲URL无效')
+          }
+          
+          // 确保使用HTTPS协议，避免Mixed Content错误
+          const httpsUrl = song.url.replace(/^http:/, 'https:')
+          console.log(`正在下载: ${song.name} - URL: ${httpsUrl}`)
+          
+          const response = await fetch(httpsUrl, {
+            method: 'GET',
+            headers: {
+              'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+            }
+          })
+          
+          if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`)
+          }
+          
           const blob = await response.blob()
+          
+          // 检查blob是否有效
+          if (blob.size === 0) {
+            throw new Error('下载的文件为空')
+          }
+          
           zip.file(song.filename, blob)
           
           // 标记为已完成
           setCompletedIds(prev => new Set([...Array.from(prev), song.id]))
           successCount++
+          console.log(`✓ 下载成功: ${song.name}`)
         } catch (error: any) {
-          console.error(`下载失败: ${song.name}`, error)
+          console.error(`✗ 下载失败: ${song.name}`, error.message)
           failCount++
         }
         
@@ -300,12 +361,12 @@ export default function PlaylistPage({ playlist }: { playlist: Playlist | null }
   }
 
   const playSongAtIndex = async (index: number) => {
-    if (index < 0 || index >= (playlist.tracks?.length || 0)) {
+    if (index < 0 || index >= allTracks.length) {
       console.error('播放索引超出范围')
       return
     }
 
-    const song = playlist.tracks![index]
+    const song = allTracks[index]
 
     try {
       const urlData = await fetch(`/api/song/url?ids=${song.id}&level=exhigh`).then(r => r.json())
@@ -351,7 +412,7 @@ export default function PlaylistPage({ playlist }: { playlist: Playlist | null }
   }
 
   const playNext = () => {
-    if (currentIndex < (playlist.tracks?.length || 0) - 1) {
+    if (currentIndex < allTracks.length - 1) {
       playSongAtIndex(currentIndex + 1)
     } else {
       alert(t('playlist:player.alreadyLast'))
@@ -565,7 +626,7 @@ export default function PlaylistPage({ playlist }: { playlist: Playlist | null }
               <span className="col-play"></span>
             </div>
             <div className="song-list">
-              {(playlist.tracks || []).map((song, index) => {
+              {allTracks.map((song, index) => {
                 const artists = song.ar?.map(ar => ar.name).join(', ') || t('playlist:table.unknownArtist')
                 const isVip = isVipSong(song)
                 const feeTag = getFeeTypeText(song.fee)
@@ -608,6 +669,29 @@ export default function PlaylistPage({ playlist }: { playlist: Playlist | null }
                 )
               })}
             </div>
+            
+            {/* 加载更多按钮 */}
+            {!hasLoadedAll && totalTracks > allTracks.length && (
+              <div className="load-more-container">
+                <button 
+                  className="btn btn-secondary load-more-btn"
+                  onClick={loadMoreTracks}
+                  disabled={isLoadingMore}
+                >
+                  {isLoadingMore ? (
+                    <>
+                      <i className="ri-loader-4-line"></i>
+                      <span>{t('playlist:actions.loading')}</span>
+                    </>
+                  ) : (
+                    <>
+                      <i className="ri-add-line"></i>
+                      <span>{t('playlist:actions.loadMore', { current: allTracks.length, total: totalTracks })}</span>
+                    </>
+                  )}
+                </button>
+              </div>
+            )}
           </div>
         </section>
       </main>
@@ -728,10 +812,33 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     // SSR直接调用API，避免HTTP请求
     const { playlist_detail } = require('NeteaseCloudMusicApi')
     const result = await playlist_detail({ id })
-    const playlist: Playlist | null = result?.body?.playlist || null
+    const fullPlaylist: Playlist | null = result?.body?.playlist || null
+    
+    // 优化：限制SSR数据量，只返回基本信息+前20首歌曲
+    const optimizedPlaylist: Playlist | null = fullPlaylist ? {
+      id: fullPlaylist.id,
+      name: fullPlaylist.name,
+      description: fullPlaylist.description,
+      coverImgUrl: fullPlaylist.coverImgUrl,
+      creator: fullPlaylist.creator,
+      playCount: fullPlaylist.playCount,
+      updateTime: fullPlaylist.updateTime,
+      // 只保留前20首歌曲的简化信息，减少数据量
+      tracks: fullPlaylist.tracks?.slice(0, 20).map(song => ({
+        id: song.id,
+        name: song.name,
+        ar: song.ar,
+        al: song.al,
+        dt: song.dt,
+        fee: song.fee
+      })) || []
+    } : null
+    
     return { 
       props: { 
-        playlist,
+        playlist: optimizedPlaylist,
+        // 添加完整歌曲数量信息，用于客户端加载更多
+        totalTracks: fullPlaylist?.tracks?.length || 0,
         ...(await serverSideTranslations(locale, ['common', 'playlist', 'search', 'seo']))
       } 
     }
@@ -739,6 +846,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     return { 
       props: { 
         playlist: null,
+        totalTracks: 0,
         ...(await serverSideTranslations(locale, ['common', 'playlist', 'search', 'seo']))
       } 
     }

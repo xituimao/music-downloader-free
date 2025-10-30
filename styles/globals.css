@@ -1661,3 +1661,48 @@ body.home-active main {
   }
 }
 
+/* ===== 加载更多按钮样式 ===== */
+.load-more-container {
+  display: flex;
+  justify-content: center;
+  padding: 24px 0;
+  border-top: 1px solid var(--border-color);
+  margin-top: 16px;
+}
+
+.load-more-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: var(--radius-md);
+  transition: all 0.2s ease;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+}
+
+.load-more-btn:hover:not(:disabled) {
+  background: var(--spotify-hover);
+  border-color: var(--spotify-green);
+  color: var(--spotify-green);
+}
+
+.load-more-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.load-more-btn i {
+  font-size: 16px;
+}
+
+@media (max-width: 768px) {
+  .load-more-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+

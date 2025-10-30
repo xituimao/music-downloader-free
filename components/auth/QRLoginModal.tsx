@@ -77,7 +77,10 @@ export default function QRLoginModal({ visible, onSuccess, onCancel }: QRLoginMo
             setState('done')
 
             console.group('✅ STEP 1: LOGIN SUCCESS (QRLoginModal)')
-            console.log('Raw data received from API:', data)
+            console.log('🔍 完整API响应数据:', JSON.stringify(data, null, 2))
+            console.log('🔍 data.profile 类型:', typeof data.profile)
+            console.log('🔍 data.profile 值:', data.profile)
+            console.log('🔍 data.profile 是否为空对象:', JSON.stringify(data.profile) === '{}')
 
             if (data.profile) {
               const userInfo = {
@@ -98,6 +101,11 @@ export default function QRLoginModal({ visible, onSuccess, onCancel }: QRLoginMo
               }
             } else {
               console.error('❌ FATAL: Login success response, but missing profile data!')
+              console.error('🔍 检查其他可能的用户信息字段:')
+              console.error('  - data.nickname:', data.nickname)
+              console.error('  - data.avatarUrl:', data.avatarUrl)
+              console.error('  - data.userId:', data.userId)
+              console.error('  - data.account:', data.account)
             }
 
             if (typeof window !== 'undefined') {

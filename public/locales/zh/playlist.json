@@ -2,7 +2,9 @@
   "actions": {
     "selectAll": "全选",
     "deselectAll": "取消全选",
-    "download": "下载"
+    "download": "下载",
+    "loading": "加载中...",
+    "loadMore": "加载更多 ({{current}}/{{total}})"
   },
   "fee": {
     "vip": "VIP",

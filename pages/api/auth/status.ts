@@ -28,13 +28,43 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const request = require('NeteaseCloudMusicApi/util/request.js')
     
+    console.log('🔍 调用网易API，Cookie前100字符:', cookie.substring(0, 100))
     const result = await login_status({ cookie }, request)
     
-    console.log('✅ 登录状态返回:', result.body.code)
+    console.log('🔍 API原始返回结构:')
+    console.log('  - result.status:', result.status)
+    console.log('  - result.body:', JSON.stringify(result.body, null, 2))
+    console.log('  - result.body.code:', result.body.code)
+    console.log('  - result.body.profile:', result.body.profile)
+    
+    // 兼容处理：有些情况下网易API返回的是嵌套结构
+    let responseCode = result.body.code
+    let profileData = result.body.profile
+    
+    // 如果直接获取失败，尝试从data字段获取
+    if (!responseCode || responseCode === undefined) {
+      responseCode = result.body.data?.code || result.status || -1
+      profileData = result.body.data?.profile || result.body.profile
+    }
+    
+    console.log('🔍 最终提取结果:')
+    console.log('  - responseCode:', responseCode)
+    console.log('  - profileData:', profileData)
+    
+    // 规范化返回格式，确保前端能正确识别
+    const response = {
+      code: responseCode,
+      message: result.body.message || (responseCode === 200 ? '已登录' : '未登录'),
+      data: {
+        profile: profileData || null
+      }
+    }
+    
+    console.log('📤 最终返回数据:', JSON.stringify(response, null, 2))
     
     // 登录状态可以短时间缓存
     res.setHeader('Cache-Control', 'private, max-age=60')
-    res.status(200).json(result.body)
+    res.status(200).json(response)
   } catch (e: any) {
     console.error('❌ 获取登录状态失败:', e.message)
     res.status(500).json({ code: 500, message: e?.message || '获取状态失败' })
