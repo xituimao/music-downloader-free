@@ -1,0 +1,59 @@
+
+> music-download-free@2.0.0 build
+> sh -c '[ -s "$HOME/.nvm/nvm.sh" ] && . "$HOME/.nvm/nvm.sh" && nvm use && next build' || next build
+
+Found '/Users/xianshenju-design/codes/music-download/.nvmrc' with version <22.21.0>
+Now using node v22.21.0 (npm v10.9.4)
+   ▲ Next.js 16.0.0 (Turbopack)
+
+   Running TypeScript ...
+   Creating an optimized production build ...
+ ✓ Compiled successfully in 763.3ms
+   Collecting page data ...
+   Generating static pages (0/11) ...
+🔄 [FloatingLoginButton] Component rendered. Current user state: null
+🔄 [FloatingLoginButton] Component rendered. Current user state: null
+🔄 [FloatingLoginButton] Component rendered. Current user state: null
+🔄 [FloatingLoginButton] Component rendered. Current user state: null
+🔄 [FloatingLoginButton] Component rendered. Current user state: null
+🔄 [FloatingLoginButton] Component rendered. Current user state: null
+🔄 [FloatingLoginButton] Component rendered. Current user state: null
+🔄 [FloatingLoginButton] Component rendered. Current user state: null
+   Generating static pages (2/11) 
+   Generating static pages (5/11) 
+   Generating static pages (8/11) 
+🔄 [FloatingLoginButton] Component rendered. Current user state: null
+🔄 [FloatingLoginButton] Component rendered. Current user state: null
+🔄 [FloatingLoginButton] Component rendered. Current user state: null
+ ✓ Generating static pages (11/11) in 180.4ms
+   Finalizing page optimization ...
+
+Route (pages)
+┌ ƒ /
+├   /_app
+├ ○ /404
+├ ● /500
+├ ƒ /api/auth/debug
+├ ƒ /api/auth/logout
+├ ƒ /api/auth/qr/check
+├ ƒ /api/auth/qr/create
+├ ƒ /api/auth/qr/key
+├ ƒ /api/auth/status
+├ ƒ /api/auth/test
+├ ƒ /api/og-image
+├ ƒ /api/playlist/detail
+├ ƒ /api/playlist/hot
+├ ƒ /api/robots.txt
+├ ƒ /api/search/playlist
+├ ƒ /api/sitemap.xml
+├ ƒ /api/song/url
+├ ● /docs/guide
+├ ● /docs/quality
+├ ● /licenses
+├ ƒ /playlist/[id]
+└ ƒ /search/[q]
+
+○  (Static)   prerendered as static content
+●  (SSG)      prerendered as static HTML (uses getStaticProps)
+ƒ  (Dynamic)  server-rendered on demand
+

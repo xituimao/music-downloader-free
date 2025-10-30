@@ -14,6 +14,8 @@ const nextConfig = {
     '/*': [
       './node_modules/NeteaseCloudMusicApi/**/*',
       './node_modules/xml2js/**/*',
+      './node_modules/sax/**/*',
+      './node_modules/xmlbuilder/**/*',
       './next-i18next.config.js',
       './public/locales/**/*'
     ]

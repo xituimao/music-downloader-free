@@ -6,6 +6,7 @@
     "dev": "sh -c '[ -s \"$HOME/.nvm/nvm.sh\" ] && . \"$HOME/.nvm/nvm.sh\" && nvm use && node server.js' || node server.js",
     "dev:http": "next dev",
     "build": "sh -c '[ -s \"$HOME/.nvm/nvm.sh\" ] && . \"$HOME/.nvm/nvm.sh\" && nvm use && next build' || next build",
+    "postbuild": "node scripts/check-missing-deps.js",
     "start": "next start"
   },
   "keywords": [
