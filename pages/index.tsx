@@ -11,6 +11,7 @@ import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { seoHome } from '@/lib/seo'
+import { optimizeImageUrl } from '@/lib/url-utils'
 import LanguageSwitcher from '@/components/LanguageSwitcher'
 import HreflangLinks from '@/components/HreflangLinks'
 import Footer from '@/components/Footer'
@@ -71,11 +72,6 @@ export default function Home({ initialPlaylists, initialOrder }: HomeProps) {
       return
     }
     router.push(`/search/${encodeURIComponent(keywords)}`)
-  }
-
-  const optimizeImageUrl = (url: string, size = 300) => {
-    if (!url) return ''
-    return `${url}?param=${size}x${size}`
   }
 
   const formatPlayCount = (count: number) => {

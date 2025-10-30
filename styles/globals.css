@@ -724,7 +724,6 @@ body.home-active main {
 /* Hero信息区 */
 .hero-info {
   display: flex;
-  align-items: flex-end;
   gap: var(--spacing-xl);
 }
 

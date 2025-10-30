@@ -2,12 +2,15 @@ import Head from 'next/head'
 import { GetServerSideProps } from 'next'
 import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/router'
+import Script from 'next/script'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { seoPlaylist } from '@/lib/seo'
+import { optimizeImageUrl, ensureHttps } from '@/lib/url-utils'
 import LanguageSwitcher from '@/components/LanguageSwitcher'
 import HreflangLinks from '@/components/HreflangLinks'
 import Footer from '@/components/Footer'
+import QRLoginModal from '@/components/auth/QRLoginModal'
 
 type Song = {
   id: number
@@ -40,6 +43,10 @@ export default function PlaylistPage({ playlist }: { playlist: Playlist | null }
   // 下载状态跟踪：正在下载的歌曲ID和已完成的歌曲ID集合
   const [downloadingId, setDownloadingId] = useState<number | null>(null)
   const [completedIds, setCompletedIds] = useState<Set<number>>(new Set())
+  
+  // 登录弹窗状态
+  const [showLoginModal, setShowLoginModal] = useState(false)
+  const [pendingDownload, setPendingDownload] = useState(false)
   
   // 播放器状态
   const [currentSong, setCurrentSong] = useState<Song | null>(null)
@@ -78,11 +85,6 @@ export default function PlaylistPage({ playlist }: { playlist: Playlist | null }
       audioRef.current.volume = volume
     }
   }, [])
-
-  const optimizeImageUrl = (url?: string, size = 300) => {
-    if (!url) return ''
-    return `${url}?param=${size}x${size}`
-  }
 
   const formatDuration = (ms: number) => {
     const seconds = Math.floor(ms / 1000)
@@ -154,9 +156,33 @@ export default function PlaylistPage({ playlist }: { playlist: Playlist | null }
     const selectedSongList = (playlist.tracks || []).filter(s => selectedSongs.has(s.id))
     const vipSongs = selectedSongList.filter(isVipSong)
 
+    // 如果有VIP歌曲，检查登录状态
     if (vipSongs.length > 0) {
-      const confirmMsg = `${t('playlist:vipWarning.title', { count: vipSongs.length })}\n\n${t('playlist:vipWarning.message')}\n\n${t('playlist:vipWarning.confirm')}`
-      if (!confirm(confirmMsg)) return
+      try {
+        const statusRes = await fetch('/api/auth/status')
+        const statusData = await statusRes.json()
+        
+        // 未登录，弹出登录提示
+        if (statusData.code !== 200 || !statusData.data?.profile) {
+          const confirmMsg = `${t('playlist:vipWarning.title', { count: vipSongs.length })}\n\n检测到 ${vipSongs.length} 首VIP歌曲。\n\n登录网易云账号后可下载完整版，是否立即登录？`
+          if (confirm(confirmMsg)) {
+            setPendingDownload(true)
+            setShowLoginModal(true)
+            return
+          }
+          // 用户选择不登录，提示仅下载试听版
+          if (!confirm('未登录将只能下载30秒试听版，是否继续？')) {
+            return
+          }
+        } else {
+          // 已登录，仅提示VIP歌曲数量
+          const confirmMsg = `${t('playlist:vipWarning.title', { count: vipSongs.length })}\n\n已登录，将尝试下载完整版。`
+          console.log(confirmMsg)
+        }
+      } catch (e) {
+        console.error('检查登录状态失败:', e)
+        // 检查失败，继续下载（降级处理）
+      }
     }
 
     // 重置下载状态
@@ -293,7 +319,8 @@ export default function PlaylistPage({ playlist }: { playlist: Playlist | null }
       setCurrentIndex(index)
 
       if (audioRef.current) {
-        audioRef.current.src = songUrl
+        // 确保使用HTTPS协议，避免Mixed Content警告
+        audioRef.current.src = ensureHttps(songUrl)
         audioRef.current.play()
       }
 
@@ -378,8 +405,33 @@ export default function PlaylistPage({ playlist }: { playlist: Playlist | null }
     }
   }
 
+  // 登录成功后的回调
+  const handleLoginSuccess = () => {
+    setShowLoginModal(false)
+    
+    // 显示成功提示
+    alert('✅ 登录成功！现在可以下载VIP歌曲完整版了')
+    
+    if (pendingDownload) {
+      setPendingDownload(false)
+      // 登录成功，自动重试下载
+      setTimeout(() => {
+        handleDownload()
+      }, 300)
+    }
+  }
+
   return (
     <>
+      {/* 登录弹窗 */}
+      <QRLoginModal
+        visible={showLoginModal}
+        onSuccess={handleLoginSuccess}
+        onCancel={() => {
+          setShowLoginModal(false)
+          setPendingDownload(false)
+        }}
+      />
       <Head>
         <title>{title}</title>
         <meta name="description" content={description} />
@@ -660,8 +712,8 @@ export default function PlaylistPage({ playlist }: { playlist: Playlist | null }
         preload="metadata"
       />
 
-      {/* JSZip 本地引用 */}
-      <script src="/jszip.min.js"></script>
+      {/* JSZip 本地引用：必须在交互前准备好，保证首次打包不报错 */}
+      <Script src="/jszip.min.js" strategy="beforeInteractive" />
 
       {/* 页脚 */}
       <Footer />
@@ -673,12 +725,10 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const id = String(ctx.params?.id || '')
   const locale = ctx.locale || 'zh'
   try {
-    const proto = (ctx.req.headers['x-forwarded-proto'] as string) || 'http'
-    const host = ctx.req.headers.host
-    const base = `${proto}://${host}`
-    const res = await fetch(`${base}/api/playlist/detail?id=${encodeURIComponent(id)}`)
-    const data = await res.json()
-    const playlist: Playlist | null = data?.playlist || null
+    // SSR直接调用API，避免HTTP请求
+    const { playlist_detail } = require('NeteaseCloudMusicApi')
+    const result = await playlist_detail({ id })
+    const playlist: Playlist | null = result?.body?.playlist || null
     return { 
       props: { 
         playlist,

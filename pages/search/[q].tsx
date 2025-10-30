@@ -31,7 +31,7 @@ export default function SearchPage({ q, playlists }: { q: string; playlists: Pla
 
   const optimizeImageUrl = (url: string, size = 300) => {
     if (!url) return ''
-    return `${url}?param=${size}x${size}`
+    return `${url}?param=${size}y${size}`
   }
 
   const formatPlayCount = (count: number) => {
@@ -134,12 +134,10 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const q = String(ctx.params?.q || '')
   const locale = ctx.locale || 'zh'
   try {
-    const proto = (ctx.req.headers['x-forwarded-proto'] as string) || 'http'
-    const host = ctx.req.headers.host
-    const base = `${proto}://${host}`
-    const res = await fetch(`${base}/api/search/playlist?keywords=${encodeURIComponent(q)}&limit=30`)
-    const data = await res.json()
-    const playlists: Playlist[] = data?.result?.playlists || []
+    // SSR直接调用API，避免HTTP请求
+    const { cloudsearch } = require('NeteaseCloudMusicApi')
+    const result = await cloudsearch({ keywords: q, type: 1000, limit: 30 })
+    const playlists: Playlist[] = result?.body?.result?.playlists || []
     return { 
       props: { 
         q, 

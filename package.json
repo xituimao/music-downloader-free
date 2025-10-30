@@ -3,8 +3,9 @@
   "version": "2.0.0",
   "description": "基于 Next.js SSR 架构的音乐下载助手，SEO 友好，支持搜索歌单与批量下载",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "dev": "sh -c '[ -s \"$HOME/.nvm/nvm.sh\" ] && . \"$HOME/.nvm/nvm.sh\" && nvm use && node server.js' || node server.js",
+    "dev:http": "next dev",
+    "build": "sh -c '[ -s \"$HOME/.nvm/nvm.sh\" ] && . \"$HOME/.nvm/nvm.sh\" && nvm use && next build' || next build",
     "start": "next start"
   },
   "keywords": [

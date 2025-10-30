@@ -3,6 +3,7 @@ import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { appWithTranslation } from 'next-i18next'
 import { Analytics } from '@vercel/analytics/react'
+import FloatingLoginButton from '@/components/FloatingLoginButton'
 import '@/styles/globals.css'
 
 declare global {
@@ -27,6 +28,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <Component {...pageProps} />
+      <FloatingLoginButton />
       <Analytics />
     </>
   )
