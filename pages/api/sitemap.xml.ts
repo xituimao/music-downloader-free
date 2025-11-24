@@ -6,6 +6,7 @@ import { SITE_URL, SUPPORTED_LOCALES } from '../../lib/constants'
  * 1. 包含静态页面（首页、文档页等）
  * 2. 自动获取热门歌单（Top 100）加入 sitemap
  * 3. 定期更新，使用缓存降低API调用频率
+ * 4. lastmod 使用构建时间戳，静态页面保持一致性
  */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   // 使用固定的站点URL，不再依赖请求头
@@ -16,7 +17,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     { path: '/', priority: '1.0', changefreq: 'daily' },
     { path: '/docs/guide', priority: '0.8', changefreq: 'weekly' },
     { path: '/docs/quality', priority: '0.7', changefreq: 'weekly' },
-    { path: '/licenses', priority: '0.6', changefreq: 'monthly' }
+    { path: '/licenses', priority: '0.5', changefreq: 'monthly' }
   ]
   
   const locales = SUPPORTED_LOCALES
@@ -27,9 +28,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       `    <xhtml:link rel="alternate" hreflang="${locale}" href="${base}/${locale}${page.path}" />`
     ).join('\n')
     
+    // 使用 BUILD_TIME 环境变量或固定日期，确保静态页面 lastmod 一致性
+    const lastmod = process.env.BUILD_TIME || new Date().toISOString().split('T')[0]
+    
     const urlsForPage = locales.map(locale => `
   <url>
     <loc>${base}/${locale}${page.path}</loc>
+    <lastmod>${lastmod}</lastmod>
     <changefreq>${page.changefreq}</changefreq>
     <priority>${page.priority}</priority>
 ${alternateLinks}
@@ -79,7 +84,7 @@ ${alternateLinks}
   <url>
     <loc>${base}/${locale}/playlist/${playlistId}</loc>
     <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.6</priority>
 ${alternateLinks}
   </url>`).join('')
       

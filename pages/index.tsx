@@ -16,6 +16,7 @@ import LanguageSwitcher from '@/components/LanguageSwitcher'
 import HreflangLinks from '@/components/HreflangLinks'
 import Footer from '@/components/Footer'
 import type { GetServerSideProps } from 'next'
+import { SEO_ROBOTS_META } from '../lib/seo'
 import nextI18NextConfig from '../next-i18next.config'
 
 interface HomeProps {
@@ -129,23 +130,25 @@ export default function Home({ initialPlaylists, initialOrder }: HomeProps) {
       <Head>
         <title>{title}</title>
         <meta name="description" content={description} />
-        <link rel="canonical" href={`/${locale}/`} />
+        <link rel="canonical" href={`https://musicdownloader.cc/${locale}/`} />
         <HreflangLinks path="/" />
         <meta property="og:type" content="website" />
         <meta property="og:title" content={title} />
         <meta property="og:description" content={description} />
+        <meta property="og:url" content={`https://musicdownloader.cc/${locale}/`} />
         <meta property="og:locale" content={locale === 'zh' ? 'zh_CN' : 'en_US'} />
+        <meta name="robots" content={SEO_ROBOTS_META} />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               '@context': 'https://schema.org',
               '@type': 'WebSite',
-              name: '音乐下载助手',
-              url: '/',
+              name: locale === 'zh' ? '音乐下载助手' : 'Music Downloader',
+              url: `https://musicdownloader.cc/${locale}/`,
               potentialAction: {
                 '@type': 'SearchAction',
-                target: '/search/{search_term_string}',
+                target: `https://musicdownloader.cc/${locale}/search/{search_term_string}`,
                 'query-input': 'required name=search_term_string'
               }
             })
@@ -157,10 +160,11 @@ export default function Home({ initialPlaylists, initialOrder }: HomeProps) {
             __html: JSON.stringify({
               '@context': 'https://schema.org',
               '@type': 'WebApplication',
-              name: '音乐下载助手',
+              name: locale === 'zh' ? '音乐下载助手' : 'Music Downloader',
               applicationCategory: 'MultimediaApplication',
               operatingSystem: 'Web',
-              description: '搜索歌单并一键批量下载，浏览器本地打包 ZIP。'
+              url: `https://musicdownloader.cc/${locale}/`,
+              description: description
             })
           }}
         />

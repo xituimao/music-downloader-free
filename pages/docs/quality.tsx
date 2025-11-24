@@ -4,6 +4,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useRouter } from 'next/router'
 import HreflangLinks from '@/components/HreflangLinks'
 import Footer from '@/components/Footer'
+import { SEO_ROBOTS_META } from '@/lib/seo'
 import type { GetStaticProps } from 'next'
 
 export default function Quality() {
@@ -16,9 +17,14 @@ export default function Quality() {
       <Head>
         <title>{t('seo:docs.quality.title')}</title>
         <meta name="description" content={t('seo:docs.quality.description')} />
-        <link rel="canonical" href={`/${locale}/docs/quality`} />
+        <link rel="canonical" href={`https://musicdownloader.cc/${locale}/docs/quality`} />
         <HreflangLinks path="/docs/quality" />
+        <meta property="og:type" content="article" />
+        <meta property="og:title" content={t('seo:docs.quality.title')} />
+        <meta property="og:description" content={t('seo:docs.quality.description')} />
+        <meta property="og:url" content={`https://musicdownloader.cc/${locale}/docs/quality`} />
         <meta property="og:locale" content={locale === 'zh' ? 'zh_CN' : 'en_US'} />
+        <meta name="robots" content={SEO_ROBOTS_META} />
       </Head>
       <main style={{ padding: 24 }}>
         <h1>音质与格式说明</h1>

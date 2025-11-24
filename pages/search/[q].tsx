@@ -4,7 +4,7 @@ import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import { seoSearch } from '@/lib/seo'
+import { seoSearch, SEO_ROBOTS_META } from '@/lib/seo'
 import LanguageSwitcher from '@/components/LanguageSwitcher'
 import HreflangLinks from '@/components/HreflangLinks'
 import Footer from '@/components/Footer'
@@ -49,12 +49,14 @@ export default function SearchPage({ q, playlists }: { q: string; playlists: Pla
       <Head>
         <title>{title}</title>
         <meta name="description" content={description} />
-        <link rel="canonical" href={`/${locale}/search/${encodeURIComponent(q)}`} />
+        <link rel="canonical" href={`https://musicdownloader.cc/${locale}/search/${encodeURIComponent(q)}`} />
         <HreflangLinks path={`/search/${encodeURIComponent(q)}`} />
         <meta property="og:type" content="website" />
         <meta property="og:title" content={title} />
         <meta property="og:description" content={description} />
+        <meta property="og:url" content={`https://musicdownloader.cc/${locale}/search/${encodeURIComponent(q)}`} />
         <meta property="og:locale" content={locale === 'zh' ? 'zh_CN' : 'en_US'} />
+        <meta name="robots" content={SEO_ROBOTS_META} />
       </Head>
 
       {/* 顶部导航栏 */}

@@ -5,6 +5,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useRouter } from 'next/router'
 import HreflangLinks from '@/components/HreflangLinks'
 import Footer from '@/components/Footer'
+import { SEO_ROBOTS_META } from '@/lib/seo'
 import type { GetStaticProps } from 'next'
 
 /**
@@ -20,9 +21,14 @@ export default function Guide() {
       <Head>
         <title>{t('seo:docs.guide.title')}</title>
         <meta name="description" content={t('seo:docs.guide.description')} />
-        <link rel="canonical" href={`/${locale}/docs/guide`} />
+        <link rel="canonical" href={`https://musicdownloader.cc/${locale}/docs/guide`} />
         <HreflangLinks path="/docs/guide" />
+        <meta property="og:type" content="article" />
+        <meta property="og:title" content={t('seo:docs.guide.title')} />
+        <meta property="og:description" content={t('seo:docs.guide.description')} />
+        <meta property="og:url" content={`https://musicdownloader.cc/${locale}/docs/guide`} />
         <meta property="og:locale" content={locale === 'zh' ? 'zh_CN' : 'en_US'} />
+        <meta name="robots" content={SEO_ROBOTS_META} />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{

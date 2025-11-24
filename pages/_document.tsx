@@ -14,6 +14,10 @@ class MyDocument extends Document {
 
           {/* Remixicon 本地引用 */}
           <link rel="stylesheet" href="/remixicon.css" />
+          
+          {/* DNS Prefetch for performance */}
+          <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+          <link rel="preconnect" href="https://www.googletagmanager.com" />
         </Head>
         <body>
           <Main />

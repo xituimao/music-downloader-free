@@ -10,6 +10,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     'User-agent: *',
     'Allow: /',
     'Disallow: /api/',
+    '',
     `Sitemap: ${base}/sitemap.xml`
   ].join('\n'))
 }

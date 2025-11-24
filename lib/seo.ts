@@ -1,5 +1,10 @@
 import i18next from 'i18next'
 
+/**
+ * 通用 SEO Robots Meta 标签配置
+ */
+export const SEO_ROBOTS_META = 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1'
+
 export const coreKeywords = [
   '一键音乐下载',
   '歌单批量下载',

@@ -5,7 +5,7 @@ import { useRouter } from 'next/router'
 import Script from 'next/script'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import { seoPlaylist } from '@/lib/seo'
+import { seoPlaylist, SEO_ROBOTS_META } from '@/lib/seo'
 import { optimizeImageUrl, ensureHttps } from '@/lib/url-utils'
 import { apiGet, getErrorMessage } from '@/lib/api-client'
 import LanguageSwitcher from '@/components/LanguageSwitcher'
@@ -195,7 +195,11 @@ export default function PlaylistPage({ playlist, totalTracks }: { playlist: Play
         
         // 未登录，弹出登录提示
         if (statusData.code !== 200 || !statusData.data?.profile) {
-          const confirmMsg = `${t('playlist:vipWarning.title', { count: vipSongs.length })}\n\n检测到 ${vipSongs.length} 首VIP歌曲。\n\n登录网易云账号后可下载完整版，是否立即登录？`
+          const confirmMsg = `${t('playlist:vipWarning.title', { count: vipSongs.length })}
+
+检测到 ${vipSongs.length} 首VIP歌曲。
+
+登录网易云账号后可下载完整版，是否立即登录？`
           if (confirm(confirmMsg)) {
             setPendingDownload(true)
             setShowLoginModal(true)
@@ -510,12 +514,17 @@ export default function PlaylistPage({ playlist, totalTracks }: { playlist: Play
       <Head>
         <title>{title}</title>
         <meta name="description" content={description} />
-        <link rel="canonical" href={`/${locale}/playlist/${playlist.id}`} />
+        <link rel="canonical" href={`https://musicdownloader.cc/${locale}/playlist/${playlist.id}`} />
         <HreflangLinks path={`/playlist/${playlist.id}`} />
-        <meta property="og:type" content="website" />
+        <meta property="og:type" content="music.playlist" />
         <meta property="og:title" content={title} />
         <meta property="og:description" content={description} />
+        <meta property="og:url" content={`https://musicdownloader.cc/${locale}/playlist/${playlist.id}`} />
         <meta property="og:locale" content={locale === 'zh' ? 'zh_CN' : 'en_US'} />
+        {playlist.coverImgUrl && (
+          <meta property="og:image" content={optimizeImageUrl(playlist.coverImgUrl, 800)} />
+        )}
+        <meta name="robots" content={SEO_ROBOTS_META} />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{

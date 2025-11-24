@@ -89,16 +89,6 @@
       ],
       "destination": "https://musicdownloader.cc/:path*",
       "permanent": true
-    },
-    {
-      "source": "/api/sitemap.xml",
-      "destination": "/sitemap.xml",
-      "permanent": true
-    },
-    {
-      "source": "/api/robots.txt",
-      "destination": "/robots.txt",
-      "permanent": true
     }
   ],
   "rewrites": [
