@@ -7,7 +7,8 @@
     "dev:http": "next dev",
     "build": "sh -c '[ -s \"$HOME/.nvm/nvm.sh\" ] && . \"$HOME/.nvm/nvm.sh\" && nvm use && next build' || next build",
     "postbuild": "node scripts/check-missing-deps.js",
-    "start": "next start"
+    "start": "next start",
+    "deploy": "vercel --prod"
   },
   "keywords": [
     "music",
@@ -36,6 +37,7 @@
   "devDependencies": {
     "@types/node": "24.9.1",
     "@types/react": "19.2.2",
-    "typescript": "5.9.3"
+    "typescript": "5.9.3",
+    "vercel": "^48.10.10"
   }
 }
