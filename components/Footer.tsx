@@ -30,7 +30,7 @@ export const Footer = () => {
           {t('common:nav.licenses')}
         </Link>
         <span style={{ color: '#ddd' }}>|</span>
-        <Link href="/api/sitemap.xml" style={{ color: 'inherit', textDecoration: 'none' }}>
+        <Link href="/sitemap.xml" style={{ color: 'inherit', textDecoration: 'none' }}>
           {t('common:nav.sitemap')}
         </Link>
       </div>

@@ -59,8 +59,6 @@ npm start
 
 #### 1. 一键部署
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/your-username/music-download)
-
 #### 2. 手动部署
 
 1. **Fork 本仓库**到你的 GitHub 账号
