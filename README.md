@@ -53,6 +53,262 @@ npm run build
 npm start
 ```
 
+## 🚢 部署指南
+
+### Vercel 部署（推荐）
+
+#### 1. 一键部署
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/your-username/music-download)
+
+#### 2. 手动部署
+
+1. **Fork 本仓库**到你的 GitHub 账号
+
+2. **登录 [Vercel](https://vercel.com)**
+
+3. **导入项目**
+   - 点击 "Add New" → "Project"
+   - 选择你 Fork 的仓库
+   - 点击 "Import"
+
+4. **配置项目**
+   - Framework Preset: `Next.js`
+   - Root Directory: `./`
+   - Build Command: `npm run build`
+   - Output Directory: `.next`
+   - Install Command: `npm install`
+
+5. **环境变量**（可选）
+   - 如需配置环境变量，在 "Environment Variables" 中添加
+
+6. **部署**
+   - 点击 "Deploy"
+   - 等待 2-3 分钟完成构建
+   - 获得免费的 `.vercel.app` 域名
+
+#### 3. 自动部署
+
+- 每次 push 到 main 分支，Vercel 自动重新部署
+- 支持预览部署（PR 自动生成预览链接）
+
+#### 4. 自定义域名
+
+1. 在 Vercel 项目设置中点击 "Domains"
+2. 添加你的域名（如 `music.yourdomain.com`）
+3. 按提示配置 DNS 记录（CNAME 或 A 记录）
+4. 等待 SSL 证书自动生成（约 1 分钟）
+
+### 自托管部署
+
+#### Docker 部署
+
+**1. 创建 Dockerfile**
+
+```dockerfile
+FROM node:20-alpine AS base
+
+# Install dependencies
+FROM base AS deps
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+
+# Build
+FROM base AS builder
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+RUN npm run build
+
+# Production
+FROM base AS runner
+WORKDIR /app
+
+ENV NODE_ENV production
+
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
+
+COPY --from=builder /app/public ./public
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+
+USER nextjs
+
+EXPOSE 3000
+
+ENV PORT 3000
+
+CMD ["node", "server.js"]
+```
+
+**2. 构建镜像**
+
+```bash
+docker build -t music-download .
+```
+
+**3. 运行容器**
+
+```bash
+docker run -p 3000:3000 music-download
+```
+
+**4. 使用 Docker Compose**
+
+创建 `docker-compose.yml`：
+
+```yaml
+version: '3.8'
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+    restart: unless-stopped
+```
+
+运行：
+```bash
+docker-compose up -d
+```
+
+#### VPS/服务器部署
+
+**1. 环境准备**
+
+```bash
+# 安装 Node.js 20+
+curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+sudo apt-get install -y nodejs
+
+# 验证版本
+node -v  # 应显示 v20.x.x
+npm -v
+```
+
+**2. 克隆项目**
+
+```bash
+git clone https://github.com/your-username/music-download.git
+cd music-download
+```
+
+**3. 安装依赖**
+
+```bash
+npm install
+```
+
+**4. 构建项目**
+
+```bash
+npm run build
+```
+
+**5. 使用 PM2 管理进程**
+
+```bash
+# 安装 PM2
+npm install -g pm2
+
+# 启动应用
+pm2 start npm --name "music-download" -- start
+
+# 查看状态
+pm2 status
+
+# 查看日志
+pm2 logs music-download
+
+# 设置开机自启
+pm2 startup
+pm2 save
+```
+
+**6. 配置 Nginx 反向代理**
+
+创建 `/etc/nginx/sites-available/music-download`：
+
+```nginx
+server {
+    listen 80;
+    server_name music.yourdomain.com;
+
+    location / {
+        proxy_pass http://localhost:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+```
+
+启用站点：
+```bash
+sudo ln -s /etc/nginx/sites-available/music-download /etc/nginx/sites-enabled/
+sudo nginx -t
+sudo systemctl reload nginx
+```
+
+**7. 配置 HTTPS（Let's Encrypt）**
+
+```bash
+# 安装 Certbot
+sudo apt install certbot python3-certbot-nginx
+
+# 获取证书
+sudo certbot --nginx -d music.yourdomain.com
+
+# 自动续期
+sudo certbot renew --dry-run
+```
+
+### 环境变量配置
+
+项目支持以下环境变量（可选）：
+
+```bash
+# .env.local
+NODE_ENV=production
+NEXT_PUBLIC_GTM_ID=GTM-XXXXXXX  # Google Tag Manager ID
+NEXT_PUBLIC_SITE_URL=https://yourdomain.com  # 网站URL
+```
+
+### 部署检查清单
+
+- [ ] Node.js 版本 >= 20.9.0
+- [ ] 依赖安装完成（`npm install`）
+- [ ] 构建成功（`npm run build`）
+- [ ] 生产环境使用 HTTPS
+- [ ] Cookie 设置为 Secure（HTTPS环境自动启用）
+- [ ] 配置自定义域名（可选）
+- [ ] 配置 GTM 埋点（可选）
+- [ ] 测试登录功能（需 HTTPS）
+- [ ] 测试歌曲下载功能
+
+### 常见问题
+
+**Q: 登录功能无法使用？**
+A: 确保部署环境使用 HTTPS，Cookie 需要 Secure 标记。Vercel 自动提供 HTTPS。
+
+**Q: 构建失败？**
+A: 检查 Node.js 版本是否 >= 20.9.0，运行 `npm run build` 查看详细错误。
+
+**Q: 下载速度慢？**
+A: 下载直连网易云 CDN，速度取决于用户网络环境，与部署服务器无关。
+
+**Q: Vercel 部署后首次访问慢？**
+A: Vercel 免费版有冷启动时间，首次访问约 3-5 秒，后续访问正常。
+
 ## 🎯 登录功能
 
 ### PC端
