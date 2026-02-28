@@ -4,10 +4,12 @@ import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import { seoSearch, SEO_ROBOTS_META } from '@/lib/seo'
+import { SEO_ROBOTS_META } from '@/lib/seo'
 import LanguageSwitcher from '@/components/LanguageSwitcher'
 import HreflangLinks from '@/components/HreflangLinks'
 import Footer from '@/components/Footer'
+import { cloudsearch } from 'NeteaseCloudMusicApi'
+import nextI18NextConfig from '@/next-i18next.config'
 
 type Playlist = {
   id: number
@@ -22,7 +24,11 @@ export default function SearchPage({ q, playlists }: { q: string; playlists: Pla
   const { t } = useTranslation(['common', 'search', 'seo'])
   const router = useRouter()
   const locale = router.locale || 'zh'
-  const { title, description } = seoSearch(q, locale)
+  
+  // 使用翻译钩子获取 SEO 文本，替代 lib/seo.ts 调用
+  const title = t('seo:search.title', { keyword: q })
+  const description = t('seo:search.description', { keyword: q })
+  const keywords = t('seo:search.keywords', { keyword: q })
 
   useEffect(() => {
     if (!(globalThis as any).dataLayer) (globalThis as any).dataLayer = []
@@ -49,6 +55,7 @@ export default function SearchPage({ q, playlists }: { q: string; playlists: Pla
       <Head>
         <title>{title}</title>
         <meta name="description" content={description} />
+        <meta name="keywords" content={keywords} />
         <link rel="canonical" href={`https://www.musicdownloader.cc/${locale}/search/${encodeURIComponent(q)}`} />
         <HreflangLinks path={`/search/${encodeURIComponent(q)}`} />
         <meta property="og:type" content="website" />
@@ -138,23 +145,23 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const q = String(ctx.params?.q || '')
   const locale = ctx.locale || 'zh'
   try {
-    // SSR直接调用API，避免HTTP请求
-    const { cloudsearch } = require('NeteaseCloudMusicApi')
+    // 使用顶层导入的 API 函数
     const result = await cloudsearch({ keywords: q, type: 1000, limit: 30 })
-    const playlists: Playlist[] = result?.body?.result?.playlists || []
+    const playlists: Playlist[] = (result?.body as any)?.result?.playlists || []
     return { 
       props: { 
         q, 
         playlists,
-        ...(await serverSideTranslations(locale, ['common', 'search', 'seo']))
+        ...(await serverSideTranslations(locale, ['common', 'search', 'seo'], nextI18NextConfig as any))
       } 
     }
   } catch (e) {
+    console.error('SSR搜索失败:', e)
     return { 
       props: { 
         q, 
         playlists: [],
-        ...(await serverSideTranslations(locale, ['common', 'search', 'seo']))
+        ...(await serverSideTranslations(locale, ['common', 'search', 'seo'], nextI18NextConfig as any))
       } 
     }
   }

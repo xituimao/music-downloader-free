@@ -7,6 +7,7 @@ import HreflangLinks from '@/components/HreflangLinks'
 import Footer from '@/components/Footer'
 import { SEO_ROBOTS_META } from '@/lib/seo'
 import type { GetStaticProps } from 'next'
+import nextI18NextConfig from '@/next-i18next.config'
 
 /**
  * 使用指南页面
@@ -21,6 +22,7 @@ export default function Guide() {
       <Head>
         <title>{t('seo:docs.guide.title')}</title>
         <meta name="description" content={t('seo:docs.guide.description')} />
+        <meta name="keywords" content={t('seo:docs.guide.keywords')} />
         <link rel="canonical" href={`https://www.musicdownloader.cc/${locale}/docs/guide`} />
         <HreflangLinks path="/docs/guide" />
         <meta property="og:type" content="article" />
@@ -375,7 +377,7 @@ export default function Guide() {
 export const getStaticProps: GetStaticProps = async ({ locale }) => {
   return {
     props: {
-      ...(await serverSideTranslations(locale || 'zh', ['docs', 'seo', 'common']))
+      ...(await serverSideTranslations(locale || 'zh', ['docs', 'seo', 'common'], nextI18NextConfig as any))
     }
   }
 }

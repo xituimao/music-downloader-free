@@ -1,5 +1,6 @@
 import { useTranslation } from 'next-i18next'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 
 /**
  * 网站页脚组件
@@ -8,6 +9,8 @@ import Link from 'next/link'
  */
 export const Footer = () => {
   const { t } = useTranslation()
+  const router = useRouter()
+  const locale = router.locale || 'zh'
 
   return (
     <footer className="footer">
@@ -18,19 +21,19 @@ export const Footer = () => {
         flexWrap: 'wrap',
         marginBottom: 8
       }}>
-        <Link href="/" style={{ color: 'inherit', textDecoration: 'none' }}>
+        <Link href="/" locale={locale} style={{ color: 'inherit', textDecoration: 'none' }}>
           {t('common:nav.home')}
         </Link>
         <span style={{ color: '#ddd' }}>|</span>
-        <Link href="/docs/guide" style={{ color: 'inherit', textDecoration: 'none' }}>
+        <Link href="/docs/guide" locale={locale} style={{ color: 'inherit', textDecoration: 'none' }}>
           {t('common:nav.guide')}
         </Link>
         <span style={{ color: '#ddd' }}>|</span>
-        <Link href="/licenses" style={{ color: 'inherit', textDecoration: 'none' }}>
+        <Link href="/licenses" locale={locale} style={{ color: 'inherit', textDecoration: 'none' }}>
           {t('common:nav.licenses')}
         </Link>
         <span style={{ color: '#ddd' }}>|</span>
-        <Link href="/sitemap.xml" style={{ color: 'inherit', textDecoration: 'none' }}>
+        <Link href="/sitemap.xml" locale={false} style={{ color: 'inherit', textDecoration: 'none' }}>
           {t('common:nav.sitemap')}
         </Link>
       </div>

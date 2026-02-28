@@ -5,13 +5,15 @@ import { useRouter } from 'next/router'
 import Script from 'next/script'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import { seoPlaylist, SEO_ROBOTS_META } from '@/lib/seo'
+import { SEO_ROBOTS_META } from '@/lib/seo'
 import { optimizeImageUrl, ensureHttps } from '@/lib/url-utils'
 import { apiGet, getErrorMessage } from '@/lib/api-client'
 import LanguageSwitcher from '@/components/LanguageSwitcher'
 import HreflangLinks from '@/components/HreflangLinks'
 import Footer from '@/components/Footer'
 import QRLoginModal from '@/components/auth/QRLoginModal'
+import { playlist_detail } from 'NeteaseCloudMusicApi'
+import nextI18NextConfig from '@/next-i18next.config'
 
 type Song = {
   id: number
@@ -74,7 +76,11 @@ export default function PlaylistPage({ playlist, totalTracks }: { playlist: Play
   }
 
   const count = allTracks.length
-  const { title, description } = seoPlaylist(playlist.name, count, playlist.description, locale)
+  // SEO 描述优先使用真实歌单简介，缺失时再回退到模板文案
+  const title = t('seo:playlist.title', { name: playlist.name, count })
+  const translatedDescription = t('seo:playlist.description', { name: playlist.name, count })
+  const description = (playlist.description || '').trim() || translatedDescription
+  const keywords = t('seo:playlist.keywords', { name: playlist.name, count })
 
   useEffect(() => {
     if (!(globalThis as any).dataLayer) (globalThis as any).dataLayer = []
@@ -514,6 +520,7 @@ export default function PlaylistPage({ playlist, totalTracks }: { playlist: Play
       <Head>
         <title>{title}</title>
         <meta name="description" content={description} />
+        <meta name="keywords" content={keywords} />
         <link rel="canonical" href={`https://www.musicdownloader.cc/${locale}/playlist/${playlist.id}`} />
         <HreflangLinks path={`/playlist/${playlist.id}`} />
         <meta property="og:type" content="music.playlist" />
@@ -859,10 +866,9 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const id = String(ctx.params?.id || '')
   const locale = ctx.locale || 'zh'
   try {
-    // SSR直接调用API，避免HTTP请求
-    const { playlist_detail } = require('NeteaseCloudMusicApi')
-    const result = await playlist_detail({ id })
-    const fullPlaylist: Playlist | null = result?.body?.playlist || null
+    // 使用顶层导入的 API 函数
+    const result = await playlist_detail({ id: Number(id) })
+    const fullPlaylist: Playlist | null = (result?.body as any)?.playlist || null
     
     // 优化：限制SSR数据量，只返回基本信息+前20首歌曲
     const optimizedPlaylist: Playlist | null = fullPlaylist ? {
@@ -896,10 +902,11 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         playlist: optimizedPlaylist,
         // 添加完整歌曲数量信息，用于客户端加载更多
         totalTracks: fullPlaylist?.tracks?.length || 0,
-        ...(await serverSideTranslations(locale, ['common', 'playlist', 'search', 'seo']))
+        ...(await serverSideTranslations(locale, ['common', 'playlist', 'search', 'seo'], nextI18NextConfig as any))
       } 
     }
   } catch (e) {
+    console.error('SSR获取歌单详情失败:', e)
     return { 
       notFound: true
     }

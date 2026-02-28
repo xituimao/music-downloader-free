@@ -1,25 +1,29 @@
 {
   "home": {
-    "title": "Music Downloader | Batch Download Playlists (Local ZIP Packaging)",
-    "description": "Search, preview and batch download playlists; package to ZIP locally in browser, stable and worry-free."
+    "title": "Free MP3 Music Download | NetEase Playlist Batch Downloader",
+    "description": "Free online MP3 music downloader. Batch download NetEase playlists to ZIP. Lossless FLAC/APE/WAV supported. No installation needed.",
+    "keywords": "free music download,MP3 download,batch download playlist,NetEase music downloader,online song download,lossless music download,FLAC download"
   },
   "search": {
-    "title": "{{keyword}} Playlist Search | Music Downloader & Batch Packaging",
-    "description": "Search results for {{keyword}} playlists, supports online preview, batch selection and local packaging download."
+    "title": "{{keyword}} Playlist Free Download | Batch Download MP3 Songs",
+    "description": "Free download {{keyword}} playlists. Preview online, batch select MP3 songs and download as ZIP.",
+    "keywords": "{{keyword}} download,free song download,MP3 batch download,playlist export"
   },
   "playlist": {
-    "title": "{{name}} Playlist Download | Batch Download {{count}} Songs",
-    "description": "{{name}} playlist with {{count}} songs. Supports online playback and one-click batch download."
+    "title": "{{name}} Free Download | Batch Download {{count}} MP3 Songs",
+    "description": "Free download {{name}} playlist with {{count}} songs. Online playback and one-click batch download MP3 to ZIP.",
+    "keywords": "{{name}} download,playlist batch download,free MP3 download,NetEase playlist export"
   },
   "docs": {
     "guide": {
-      "title": "Music Downloader User Guide | FAQ",
-      "description": "Batch download steps, notes and FAQ; VIP songs preview version instructions."
+      "title": "Free Music Download Guide | MP3 Batch Download Tutorial",
+      "description": "Free music download tutorial: How to batch download NetEase playlists, MP3 download tips, VIP song preview notes.",
+      "keywords": "music download tutorial,MP3 download guide,playlist batch download tutorial,free music download"
     },
     "quality": {
-      "title": "Audio Quality Guide | MP3/FLAC/APE Differences",
-      "description": "Learn the differences between audio quality formats and choose the best download option for you."
+      "title": "MP3 vs FLAC vs APE | Free Music Download Format Guide",
+      "description": "MP3, FLAC, APE, WAV audio quality comparison. Learn the differences and choose the best format for music download.",
+      "keywords": "MP3 quality,FLAC lossless,APE format,audio format comparison,lossless music download"
     }
   }
 }
-

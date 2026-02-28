@@ -8,6 +8,11 @@ module.exports = {
     defaultLocale: 'zh',
     locales: ['zh', 'en'],
   },
+  fallbackLng: {
+    default: ['zh'],
+    en: ['en', 'zh'],
+    zh: ['zh'],
+  },
   localePath: typeof window === 'undefined' 
     ? require('path').resolve('./public/locales') 
     : '/locales',

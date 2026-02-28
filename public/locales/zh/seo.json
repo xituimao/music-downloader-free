@@ -1,25 +1,29 @@
 {
   "home": {
-    "title": "一键音乐下载｜歌单批量下载工具（本地 ZIP 打包）",
-    "description": "搜索歌单，在线预览与一键批量下载；浏览器本地打包 ZIP，稳定省心。"
+    "title": "免费MP3音乐下载｜网易云歌单批量下载工具",
+    "description": "免费在线下载MP3音乐，支持网易云歌单批量下载。一键打包ZIP，无损音质FLAC/APE/WAV可选，浏览器本地完成无需安装。",
+    "keywords": "免费音乐下载,MP3下载,歌单批量下载,网易云音乐下载,在线下载歌曲,无损音乐下载,FLAC下载,批量导出歌单"
   },
   "search": {
-    "title": "{{keyword}} 歌单搜索｜一键音乐下载与批量打包",
-    "description": "{{keyword}} 相关歌单搜索结果，支持在线预览、批量勾选并本地打包下载。"
+    "title": "{{keyword}} 歌单免费下载｜一键批量下载MP3歌曲",
+    "description": "{{keyword}} 相关歌单免费下载，支持在线预览、批量勾选MP3歌曲并本地打包ZIP下载。",
+    "keywords": "{{keyword}}下载,免费下载歌曲,MP3批量下载,歌单导出"
   },
   "playlist": {
-    "title": "{{name}} 歌单下载｜批量下载 {{count}} 首歌曲",
-    "description": "{{name}} 歌单，共 {{count}} 首歌曲。支持在线播放与一键批量下载。"
+    "title": "{{name}} 免费下载｜批量下载 {{count}} 首MP3歌曲",
+    "description": "{{name}} 歌单免费下载，共 {{count}} 首歌曲。支持在线播放与一键批量下载MP3，浏览器本地打包ZIP。",
+    "keywords": "{{name}}下载,歌单批量下载,免费MP3下载,网易云歌单导出"
   },
   "docs": {
     "guide": {
-      "title": "一键音乐下载使用教程｜常见问题",
-      "description": "歌单批量下载步骤、注意事项与常见问题；VIP 歌曲仅试听版说明。"
+      "title": "免费音乐下载教程｜MP3批量下载使用指南",
+      "description": "免费音乐下载教程：网易云歌单批量下载步骤、MP3下载注意事项、VIP歌曲试听版说明。",
+      "keywords": "音乐下载教程,MP3下载教程,歌单批量下载教程,免费下载音乐"
     },
     "quality": {
-      "title": "音质格式科普｜MP3/FLAC/APE 区别说明",
-      "description": "了解不同音质格式的区别，选择最适合你的音质下载方案。"
+      "title": "MP3/FLAC/APE音质对比｜免费音乐下载格式指南",
+      "description": "MP3、FLAC、APE、WAV音质格式科普，了解不同音质区别，选择最适合你的音乐下载格式。",
+      "keywords": "MP3音质,FLAC无损,APE格式,音乐格式对比,无损音乐下载"
     }
   }
 }
-

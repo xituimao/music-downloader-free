@@ -6,6 +6,7 @@ import HreflangLinks from '@/components/HreflangLinks'
 import Footer from '@/components/Footer'
 import { SEO_ROBOTS_META } from '@/lib/seo'
 import type { GetStaticProps } from 'next'
+import nextI18NextConfig from '@/next-i18next.config'
 
 export default function Quality() {
   const { t } = useTranslation(['docs', 'seo', 'common'])
@@ -17,6 +18,7 @@ export default function Quality() {
       <Head>
         <title>{t('seo:docs.quality.title')}</title>
         <meta name="description" content={t('seo:docs.quality.description')} />
+        <meta name="keywords" content={t('seo:docs.quality.keywords')} />
         <link rel="canonical" href={`https://www.musicdownloader.cc/${locale}/docs/quality`} />
         <HreflangLinks path="/docs/quality" />
         <meta property="og:type" content="article" />
@@ -69,7 +71,7 @@ export default function Quality() {
 export const getStaticProps: GetStaticProps = async ({ locale }) => {
   return {
     props: {
-      ...(await serverSideTranslations(locale || 'zh', ['docs', 'seo', 'common']))
+      ...(await serverSideTranslations(locale || 'zh', ['docs', 'seo', 'common'], nextI18NextConfig as any))
     }
   }
 }

@@ -10,7 +10,6 @@ import { useState } from 'react'
 import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import { seoHome } from '@/lib/seo'
 import { optimizeImageUrl } from '@/lib/url-utils'
 import LanguageSwitcher from '@/components/LanguageSwitcher'
 import HreflangLinks from '@/components/HreflangLinks'
@@ -18,6 +17,7 @@ import Footer from '@/components/Footer'
 import type { GetServerSideProps } from 'next'
 import { SEO_ROBOTS_META } from '../lib/seo'
 import nextI18NextConfig from '../next-i18next.config'
+import { top_playlist } from 'NeteaseCloudMusicApi'
 
 interface HomeProps {
   initialPlaylists: any[]
@@ -28,7 +28,12 @@ export default function Home({ initialPlaylists, initialOrder }: HomeProps) {
   const { t } = useTranslation(['common', 'home', 'seo'])
   const router = useRouter()
   const locale = router.locale || 'zh'
-  const { title, description } = seoHome(locale)
+  
+  // 直接从 useTranslation 获取 SEO 文本，避免调用 lib/seo.ts 导致的崩溃
+  const title = t('seo:home.title')
+  const description = t('seo:home.description')
+  const keywords = t('seo:home.keywords')
+  
   const [homeSearchInput, setHomeSearchInput] = useState('')
   const [hotPlaylists, setHotPlaylists] = useState<any[]>(initialPlaylists)
   const [order, setOrder] = useState<'hot' | 'new'>(initialOrder)
@@ -130,6 +135,7 @@ export default function Home({ initialPlaylists, initialOrder }: HomeProps) {
       <Head>
         <title>{title}</title>
         <meta name="description" content={description} />
+        <meta name="keywords" content={keywords} />
         <link rel="canonical" href={`https://www.musicdownloader.cc/${locale}/`} />
         <HreflangLinks path="/" />
         <meta property="og:type" content="website" />
@@ -290,20 +296,15 @@ export default function Home({ initialPlaylists, initialOrder }: HomeProps) {
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { locale } = ctx as any
   try {
-    // 使用ES模块导入（匿名访问模式）
-    const { top_playlist } = require('NeteaseCloudMusicApi')
-    
     const result = await top_playlist({
       cat: '全部',
       limit: 20,
       offset: 0,
-      order: 'hot'
-      // 不传cookie，使用匿名访问
+      order: 'hot' as any
     })
 
     let playlists: any[] = (result?.body as any)?.playlists || []
     
-    // 客户端会处理排序，这里返回原始数据即可
     return {
       props: {
         ...(await serverSideTranslations(locale || 'zh', ['common', 'home', 'seo'], nextI18NextConfig as any)),
@@ -313,7 +314,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     }
   } catch (error) {
     console.error('获取热门歌单失败:', error)
-    // 出错时返回空数据，前端会显示"暂无数据"
     return {
       props: {
         ...(await serverSideTranslations(locale || 'zh', ['common', 'home', 'seo'], nextI18NextConfig as any)),
