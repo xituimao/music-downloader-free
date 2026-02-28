@@ -87,7 +87,19 @@
           "value": "http"
         }
       ],
-      "destination": "https://musicdownloader.cc/:path*",
+      "destination": "https://www.musicdownloader.cc/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "header",
+          "key": "host",
+          "value": "musicdownloader.cc"
+        }
+      ],
+      "destination": "https://www.musicdownloader.cc/:path*",
       "permanent": true
     }
   ],

@@ -17,14 +17,37 @@ export default function Quality() {
       <Head>
         <title>{t('seo:docs.quality.title')}</title>
         <meta name="description" content={t('seo:docs.quality.description')} />
-        <link rel="canonical" href={`https://musicdownloader.cc/${locale}/docs/quality`} />
+        <link rel="canonical" href={`https://www.musicdownloader.cc/${locale}/docs/quality`} />
         <HreflangLinks path="/docs/quality" />
         <meta property="og:type" content="article" />
         <meta property="og:title" content={t('seo:docs.quality.title')} />
         <meta property="og:description" content={t('seo:docs.quality.description')} />
-        <meta property="og:url" content={`https://musicdownloader.cc/${locale}/docs/quality`} />
+        <meta property="og:url" content={`https://www.musicdownloader.cc/${locale}/docs/quality`} />
         <meta property="og:locale" content={locale === 'zh' ? 'zh_CN' : 'en_US'} />
         <meta name="robots" content={SEO_ROBOTS_META} />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'BreadcrumbList',
+              itemListElement: [
+                {
+                  '@type': 'ListItem',
+                  position: 1,
+                  name: locale === 'zh' ? '首页' : 'Home',
+                  item: `https://www.musicdownloader.cc/${locale}/`
+                },
+                {
+                  '@type': 'ListItem',
+                  position: 2,
+                  name: t('seo:docs.quality.title'),
+                  item: `https://www.musicdownloader.cc/${locale}/docs/quality`
+                }
+              ]
+            })
+          }}
+        />
       </Head>
       <main style={{ padding: 24 }}>
         <h1>音质与格式说明</h1>

@@ -130,12 +130,12 @@ export default function Home({ initialPlaylists, initialOrder }: HomeProps) {
       <Head>
         <title>{title}</title>
         <meta name="description" content={description} />
-        <link rel="canonical" href={`https://musicdownloader.cc/${locale}/`} />
+        <link rel="canonical" href={`https://www.musicdownloader.cc/${locale}/`} />
         <HreflangLinks path="/" />
         <meta property="og:type" content="website" />
         <meta property="og:title" content={title} />
         <meta property="og:description" content={description} />
-        <meta property="og:url" content={`https://musicdownloader.cc/${locale}/`} />
+        <meta property="og:url" content={`https://www.musicdownloader.cc/${locale}/`} />
         <meta property="og:locale" content={locale === 'zh' ? 'zh_CN' : 'en_US'} />
         <meta name="robots" content={SEO_ROBOTS_META} />
         <script
@@ -145,10 +145,10 @@ export default function Home({ initialPlaylists, initialOrder }: HomeProps) {
               '@context': 'https://schema.org',
               '@type': 'WebSite',
               name: locale === 'zh' ? '音乐下载助手' : 'Music Downloader',
-              url: `https://musicdownloader.cc/${locale}/`,
+              url: `https://www.musicdownloader.cc/${locale}/`,
               potentialAction: {
                 '@type': 'SearchAction',
-                target: `https://musicdownloader.cc/${locale}/search/{search_term_string}`,
+                target: `https://www.musicdownloader.cc/${locale}/search/{search_term_string}`,
                 'query-input': 'required name=search_term_string'
               }
             })
@@ -163,7 +163,7 @@ export default function Home({ initialPlaylists, initialOrder }: HomeProps) {
               name: locale === 'zh' ? '音乐下载助手' : 'Music Downloader',
               applicationCategory: 'MultimediaApplication',
               operatingSystem: 'Web',
-              url: `https://musicdownloader.cc/${locale}/`,
+              url: `https://www.musicdownloader.cc/${locale}/`,
               description: description
             })
           }}
@@ -248,6 +248,8 @@ export default function Home({ initialPlaylists, initialOrder }: HomeProps) {
                   <img
                     src={optimizeImageUrl(playlist.coverImgUrl, 300)}
                     alt={playlist.name}
+                    width={300}
+                    height={300}
                     loading="lazy"
                   />
                   <div className="hot-playlist-card-title" title={playlist.name}>

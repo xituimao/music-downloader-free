@@ -18,6 +18,15 @@ class MyDocument extends Document {
           {/* DNS Prefetch for performance */}
           <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
           <link rel="preconnect" href="https://www.googletagmanager.com" />
+          {/* 网易云音乐图片域名预连接 */}
+          <link rel="dns-prefetch" href="https://p1.music.126.net" />
+          <link rel="dns-prefetch" href="https://p2.music.126.net" />
+          <link rel="dns-prefetch" href="https://p3.music.126.net" />
+          <link rel="dns-prefetch" href="https://p4.music.126.net" />
+          <link rel="preconnect" href="https://p1.music.126.net" crossOrigin="anonymous" />
+          <link rel="preconnect" href="https://p2.music.126.net" crossOrigin="anonymous" />
+          <link rel="preconnect" href="https://p3.music.126.net" crossOrigin="anonymous" />
+          <link rel="preconnect" href="https://p4.music.126.net" crossOrigin="anonymous" />
         </Head>
         <body>
           <Main />

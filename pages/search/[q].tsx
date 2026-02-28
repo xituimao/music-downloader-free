@@ -49,14 +49,14 @@ export default function SearchPage({ q, playlists }: { q: string; playlists: Pla
       <Head>
         <title>{title}</title>
         <meta name="description" content={description} />
-        <link rel="canonical" href={`https://musicdownloader.cc/${locale}/search/${encodeURIComponent(q)}`} />
+        <link rel="canonical" href={`https://www.musicdownloader.cc/${locale}/search/${encodeURIComponent(q)}`} />
         <HreflangLinks path={`/search/${encodeURIComponent(q)}`} />
         <meta property="og:type" content="website" />
         <meta property="og:title" content={title} />
         <meta property="og:description" content={description} />
-        <meta property="og:url" content={`https://musicdownloader.cc/${locale}/search/${encodeURIComponent(q)}`} />
+        <meta property="og:url" content={`https://www.musicdownloader.cc/${locale}/search/${encodeURIComponent(q)}`} />
         <meta property="og:locale" content={locale === 'zh' ? 'zh_CN' : 'en_US'} />
-        <meta name="robots" content={SEO_ROBOTS_META} />
+        <meta name="robots" content="noindex, follow" />
       </Head>
 
       {/* 顶部导航栏 */}
@@ -104,6 +104,8 @@ export default function SearchPage({ q, playlists }: { q: string; playlists: Pla
                   <img
                     src={optimizeImageUrl(playlist.coverImgUrl, 300)}
                     alt={playlist.name}
+                    width={300}
+                    height={300}
                     loading="lazy"
                   />
                   <div className="playlist-card-body">

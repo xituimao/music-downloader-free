@@ -514,12 +514,12 @@ export default function PlaylistPage({ playlist, totalTracks }: { playlist: Play
       <Head>
         <title>{title}</title>
         <meta name="description" content={description} />
-        <link rel="canonical" href={`https://musicdownloader.cc/${locale}/playlist/${playlist.id}`} />
+        <link rel="canonical" href={`https://www.musicdownloader.cc/${locale}/playlist/${playlist.id}`} />
         <HreflangLinks path={`/playlist/${playlist.id}`} />
         <meta property="og:type" content="music.playlist" />
         <meta property="og:title" content={title} />
         <meta property="og:description" content={description} />
-        <meta property="og:url" content={`https://musicdownloader.cc/${locale}/playlist/${playlist.id}`} />
+        <meta property="og:url" content={`https://www.musicdownloader.cc/${locale}/playlist/${playlist.id}`} />
         <meta property="og:locale" content={locale === 'zh' ? 'zh_CN' : 'en_US'} />
         {playlist.coverImgUrl && (
           <meta property="og:image" content={optimizeImageUrl(playlist.coverImgUrl, 800)} />
@@ -539,6 +539,29 @@ export default function PlaylistPage({ playlist, totalTracks }: { playlist: Play
                 name: s.name,
                 position: i + 1
               }))
+            })
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'BreadcrumbList',
+              itemListElement: [
+                {
+                  '@type': 'ListItem',
+                  position: 1,
+                  name: locale === 'zh' ? '首页' : 'Home',
+                  item: `https://www.musicdownloader.cc/${locale}/`
+                },
+                {
+                  '@type': 'ListItem',
+                  position: 2,
+                  name: playlist.name,
+                  item: `https://www.musicdownloader.cc/${locale}/playlist/${playlist.id}`
+                }
+              ]
             })
           }}
         />
@@ -580,6 +603,8 @@ export default function PlaylistPage({ playlist, totalTracks }: { playlist: Play
                   className="hero-cover"
                   src={optimizeImageUrl(playlist.coverImgUrl, 400)}
                   alt={t('playlist:detail.coverAlt')}
+                  width={400}
+                  height={400}
                 />
                 <div className="hero-meta">
                   <p className="hero-label">{t('playlist:detail.playlistLabel')}</p>
@@ -727,6 +752,8 @@ export default function PlaylistPage({ playlist, totalTracks }: { playlist: Play
               className="player-cover"
               src={optimizeImageUrl(currentSong.al?.picUrl || playlist.coverImgUrl, 200)}
               alt="封面"
+              width={60}
+              height={60}
             />
             <div className="player-text">
               <div className="player-name">{currentSong.name}</div>
@@ -857,6 +884,13 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       })) || []
     } : null
     
+    // 如果歌单不存在，返回 404
+    if (!fullPlaylist) {
+      return {
+        notFound: true
+      }
+    }
+    
     return { 
       props: { 
         playlist: optimizedPlaylist,
@@ -867,11 +901,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     }
   } catch (e) {
     return { 
-      props: { 
-        playlist: null,
-        totalTracks: 0,
-        ...(await serverSideTranslations(locale, ['common', 'playlist', 'search', 'seo']))
-      } 
+      notFound: true
     }
   }
 }

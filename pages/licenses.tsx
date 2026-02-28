@@ -95,7 +95,7 @@ export default function Licenses() {
       <Head>
         <title>{t('licenses:title')} | {t('common:brand')}</title>
         <meta name="description" content={t('licenses:subtitle')} />
-        <link rel="canonical" href={`https://musicdownloader.cc/${locale}/licenses`} />
+        <link rel="canonical" href={`https://www.musicdownloader.cc/${locale}/licenses`} />
         <HreflangLinks path="/licenses" />
         <meta name="robots" content="noindex, follow" />
         <meta property="og:locale" content={locale === 'zh' ? 'zh_CN' : 'en_US'} />

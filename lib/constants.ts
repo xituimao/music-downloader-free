@@ -4,7 +4,7 @@
  */
 
 // 站点配置
-export const SITE_DOMAIN = 'musicdownloader.cc'
+export const SITE_DOMAIN = 'www.musicdownloader.cc'
 export const SITE_URL = `https://${SITE_DOMAIN}`
 
 // API配置
