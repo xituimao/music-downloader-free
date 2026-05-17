@@ -11,40 +11,46 @@ const { execSync } = require('child_process');
 console.log('🔍 开始检测依赖完整性...\n');
 
 // 读取所有 .nft.json 文件
-const nftFiles = execSync('find .next/server -name "*.nft.json"', { encoding: 'utf-8' })
-  .trim()
-  .split('\n');
+const { globSync } = require('glob');
+const nftFiles = globSync('.next/server/**/*.nft.json');
 
 const missingDeps = new Set();
-const checkedPackages = new Set();
 
-for (const nftFile of nftFiles) {
-  const nftData = JSON.parse(fs.readFileSync(nftFile, 'utf-8'));
-  const tracedFiles = new Set(nftData.files);
+// 定义需要检查的关键依赖及其对应的页面路径
+const criticalPackages = [
+  { name: 'NeteaseCloudMusicApi', pages: ['index.js', 'playlist', 'search', 'api'] },
+  { name: 'xml2js', pages: ['api/sitemap.xml'] },
+  { name: 'sax', pages: ['api/sitemap.xml'] },
+  { name: 'xmlbuilder', pages: ['api/sitemap.xml'] },
+];
 
-  // 检查关键依赖包
-  const criticalPackages = [
-    'NeteaseCloudMusicApi',
-    'xml2js',
-    'sax',
-    'xmlbuilder',
-  ];
+for (const pkg of criticalPackages) {
+  let foundInAnyRelevantPage = false;
+  let checkedAnyRelevantPage = false;
 
-  for (const pkg of criticalPackages) {
-    if (checkedPackages.has(pkg)) continue;
-    checkedPackages.add(pkg);
+  for (const nftFile of nftFiles) {
+    const relativePath = path.relative('.next/server/pages', nftFile).replace(/\\/g, '/');
+    const isRelevant = pkg.pages.some(p => relativePath.includes(p));
+    
+    if (!isRelevant) continue;
+    checkedAnyRelevantPage = true;
 
-    // 检查包的主文件是否被追踪
-    const pkgPath = `node_modules/${pkg}/`;
+    const nftData = JSON.parse(fs.readFileSync(nftFile, 'utf-8'));
+    const tracedFiles = new Set(nftData.files);
+    const pkgPath = `node_modules/${pkg.name}/`;
     const pkgFiles = [...tracedFiles].filter(f => f.includes(pkgPath));
 
-    if (pkgFiles.length === 0) {
-      missingDeps.add(pkg);
-      console.log(`❌ 缺失依赖: ${pkg}`);
-      console.log(`   在 ${nftFile} 中未找到`);
-    } else {
-      console.log(`✅ 已包含: ${pkg} (${pkgFiles.length} 个文件)`);
+    if (pkgFiles.length > 0) {
+      foundInAnyRelevantPage = true;
+      console.log(`✅ 已包含: ${pkg.name} (${pkgFiles.length} 个文件) 在 ${relativePath}`);
+      break;
     }
+  }
+
+  if (checkedAnyRelevantPage && !foundInAnyRelevantPage) {
+    missingDeps.add(pkg.name);
+    console.log(`❌ 缺失依赖: ${pkg.name}`);
+    console.log(`   在相关页面中未找到`);
   }
 }
 

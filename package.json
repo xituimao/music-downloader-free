@@ -3,9 +3,9 @@
   "version": "2.0.0",
   "description": "基于 Next.js SSR 架构的音乐下载助手，SEO 友好，支持搜索歌单与批量下载",
   "scripts": {
-    "dev": "sh -c '[ -s \"$HOME/.nvm/nvm.sh\" ] && . \"$HOME/.nvm/nvm.sh\" && nvm use && node server.js' || node server.js",
+    "dev": "node server.js",
     "dev:http": "next dev",
-    "build": "sh -c '[ -s \"$HOME/.nvm/nvm.sh\" ] && . \"$HOME/.nvm/nvm.sh\" && nvm use && next build' || next build",
+    "build": "next build",
     "postbuild": "node scripts/check-missing-deps.js",
     "start": "next start",
     "deploy": "vercel --prod"
@@ -24,6 +24,7 @@
     "@types/cookie": "^1.0.0",
     "@vercel/analytics": "^1.5.0",
     "@vercel/og": "^0.8.5",
+    "axios": "^1.16.1",
     "cookie": "^1.0.2",
     "i18next": "^25.6.0",
     "NeteaseCloudMusicApi": "^4.28.0",

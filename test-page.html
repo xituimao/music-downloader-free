@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Test Page</title>
+</head>
+<body>
+  <h1>Test Page</h1>
+  <div id="output">Loading...</div>
+  <script>
+    fetch('http://localhost:3000/api/playlist/hot')
+      .then(r => r.json())
+      .then(data => {
+        document.getElementById('output').innerHTML = 
+          '<p>Playlists count: ' + (data.playlists ? data.playlists.length : 0) + '</p>' +
+          '<pre>' + JSON.stringify(data.playlists ? data.playlists.slice(0, 2) : data).substring(0, 500) + '</pre>';
+      })
+      .catch(err => {
+        document.getElementById('output').innerHTML = '<p>Error: ' + err.message + '</p>';
+      });
+  </script>
+</body>
+</html>

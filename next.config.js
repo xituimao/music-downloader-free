@@ -4,9 +4,6 @@ const { i18n } = require('./next-i18next.config')
 const nextConfig = {
   reactStrictMode: true,
   i18n,
-  // 关键修复：将 NeteaseCloudMusicApi 设为外部包，
-  // 确保在 Vercel Serverless 环境中保留完整 module/ 目录
-  serverExternalPackages: ['NeteaseCloudMusicApi'],
   images: {
     remotePatterns: [
       { protocol: 'http', hostname: '**' },
